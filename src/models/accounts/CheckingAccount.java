@@ -5,38 +5,40 @@ import models.client.Client;
 import java.math.BigDecimal;
 
 public class CheckingAccount extends Account {
+    private static final BigDecimal DEPOSIT_FEE = BigDecimal.ONE;
+    private static final BigDecimal WITHDRAWAL_FEE_PERCENT = new BigDecimal("0.03");
+    private static final BigDecimal TRANSFER_FEE = BigDecimal.ZERO;
+
     public CheckingAccount(Client client) {
         super(client);
     }
 
     @Override
     public BigDecimal getDepositFee(BigDecimal amount) {
-        return null;
+        return DEPOSIT_FEE;
     }
 
     @Override
     public BigDecimal getWithdrawalFee(BigDecimal amount) {
-        return null;
+        return (amount.multiply(WITHDRAWAL_FEE_PERCENT));
     }
 
     @Override
     public BigDecimal getTransferFee(BigDecimal amount) {
-        return null;
+        return TRANSFER_FEE;
     }
 
-    /**
-     * Deposit
-     */
     public void addFunds(BigDecimal amount) {
-        this.balance = this.balance.add(amount);
+        this.balance = this.balance.add(amount).add(getDepositFee(amount));
     }
 
-    /**
-     * Withdrawal
-     */
     public void deductFunds(BigDecimal amount) {
         assert amount.signum() > 0;
-        // TODO: Check if current balance is at least equal to {@code amount}.
-        this.balance = this.balance.subtract(amount);
+        // Check if current balance is at least equal to {@code amount}.
+        BigDecimal toDeduct = amount.add(getWithdrawalFee(amount));
+//        if (this.balance.compareTo(toDeduct) < 0) {
+//            throw new Exception("Not enough funds for withdrawal.");
+//        }
+        this.balance = this.balance.subtract(toDeduct);
     }
 }

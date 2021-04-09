@@ -9,11 +9,11 @@ import java.time.LocalDateTime;
  * Move funds from one account to another.
  */
 public class Transfer implements Comparable<Transfer> {
-    private LocalDateTime date;
-    private BigDecimal amount;
-    private String description;
-    private Account sourceAccount;
-    private Account destinationAccount;
+    private final LocalDateTime date;
+    private final BigDecimal amount;
+    private final String description;
+    private final Account sourceAccount;
+    private final Account destinationAccount;
 
     public Transfer(BigDecimal amount,
                     String description,
@@ -35,7 +35,7 @@ public class Transfer implements Comparable<Transfer> {
     }
 
     public void execute() {
-        sourceAccount.deductFunds(amount);
+        sourceAccount.deductFunds(amount.add(sourceAccount.getTransferFee(amount)));
         destinationAccount.addFunds(amount);
     }
 

@@ -2,8 +2,10 @@ package models.accounts;
 
 import models.client.Client;
 
+/**
+ * Provides a method to create an Account object.
+ */
 public class AccountFactory {
-
     public static Account getAccount(String accountType, Client client) {
         if (accountType == null) {
             return null;
