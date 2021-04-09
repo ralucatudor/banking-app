@@ -9,6 +9,7 @@ public class BankingInteractor {
     // private ??
     public final ClientService clientService;
     public final AtmService atmService;
+    public final AccountService accountService;
 
     // Actions
     enum Queries {
@@ -19,11 +20,14 @@ public class BankingInteractor {
         createAtm,
         showAtms,
         depositInAccount,
+        showLinkedCards,
+        addCardToAccount,
         exit
     }
 
     public BankingInteractor() {
         this.clientService = ClientService.getInstance();
+        this.accountService = AccountService.getInstance();
         this.atmService = new AtmService(); // make singleton?
     }
 
@@ -50,6 +54,8 @@ public class BankingInteractor {
                 case createAtm -> createAtmInteract(scanner);
                 case showAtms -> atmService.showAtms();
                 case depositInAccount -> depositInAccountInteractor(scanner);
+                case showLinkedCards -> showLinkedCardsInteractor(scanner);
+                case addCardToAccount -> addCardToAccountInteractor(scanner);
                 default ->
                         // TODO Handle this
                         System.out.println("hopa");
@@ -77,6 +83,8 @@ public class BankingInteractor {
                 lastName,
                 emailAddress,
                 address);
+
+        System.out.println("Successfully registered client!");
     }
 
     private Address readAddress(Scanner scanner) {
@@ -105,6 +113,7 @@ public class BankingInteractor {
 
         try {
             clientService.openCheckingAccountForClient(clientIdentifier);
+            System.out.println("Successfully opened checking account!");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -131,7 +140,8 @@ public class BankingInteractor {
 
         Address address = readAddress(scanner);
 
-         atmService.createAtm(address, funds, identifier);
+        atmService.createAtm(address, funds, identifier);
+        System.out.println("Successfully created ATM!");
     }
 
     private void depositInAccountInteractor(Scanner scanner) {
@@ -148,6 +158,34 @@ public class BankingInteractor {
 
         try {
             atmService.depositInAccount(atmIdentifier, cardNumber, amount);
+            System.out.println("Successfully added funds in the linked account!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showLinkedCardsInteractor(Scanner scanner) {
+        System.out.println("Please enter");
+
+        System.out.println("IBAN:");
+        String iban = scanner.next();
+
+        try {
+            accountService.showLinkedCards(iban);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addCardToAccountInteractor(Scanner scanner) {
+        System.out.println("Please enter");
+
+        System.out.println("IBAN:");
+        String iban = scanner.next();
+
+        try {
+            accountService.addCard(iban);
+            System.out.println("Successfully added another card to the specified account!");
         } catch (Exception e) {
             e.printStackTrace();
         }

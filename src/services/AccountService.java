@@ -2,6 +2,7 @@ package services;
 
 import models.accounts.Account;
 import models.accounts.AccountFactory;
+import models.card.Card;
 import models.client.Client;
 
 import java.util.ArrayList;
@@ -53,9 +54,32 @@ public class AccountService {
         }
     }
 
-    public void showCards() {
+    public Account getAccountByIban(String iban) throws Exception {
+        for (Account account : accounts) {
+            if (account.getIban().equals(iban)) {
+                return account;
+            }
+        }
 
+        throw new Exception("Account having IBAN = " + iban + " not found.");
     }
 
-    // TODO add another card to an account?
+    /**
+     * Displays cards linked to an account.
+     */
+    public void showLinkedCards(String iban) throws Exception {
+        Account account = getAccountByIban(iban);
+        for (Card card : account.getCards()) {
+            System.out.println(card);
+        }
+    }
+
+    /**
+     * Adds another card to an account.
+     */
+    public void addCard(String iban) throws Exception {
+        Account account = getAccountByIban(iban);
+        account.createCard();
+    }
+
 }

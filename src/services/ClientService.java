@@ -32,8 +32,6 @@ public class ClientService {
                                   Address address) {
         Client client = new Client(firstName, lastName, emailAddress, address);
         clients.add(client);
-        System.out.println("Successfully registered client!");
-        System.out.println(client);
     }
 
     public void showClients() {

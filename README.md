@@ -48,7 +48,6 @@ Notes:
 The withdrawal function should only work if the bank account has enough money to withdraw a requested amount.
 
 ## Actions
-- TODO
 
 TODOs
 - Builder pattern?

@@ -43,6 +43,14 @@ public abstract class Account {
         return client;
     }
 
+    public String getIban() {
+        return iban;
+    }
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
     /**
      * Deposit
      */
