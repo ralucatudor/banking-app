@@ -24,6 +24,7 @@ public class Card {
     private final String cvv;
     private final String pin;
     private boolean isBlocked;
+    // add LinkedAccount?
 
     public Card() {
         this.issueDate = LocalDate.now();
@@ -52,6 +53,10 @@ public class Card {
 
     public boolean isValid() {
         return !this.isBlocked && !isExpired();
+    }
+
+    public String getNumber() {
+        return number;
     }
 
     @Override

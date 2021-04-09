@@ -3,7 +3,6 @@ package services;
 import models.client.Client;
 import utils.Address;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,10 +10,14 @@ import java.util.List;
  * Singleton class.
  */
 public class ClientService {
-    private List<Client> clients = new ArrayList<>();
+    // TODO tine map in loc de list?
+    private final List<Client> clients = new ArrayList<>();
     private static ClientService instance = null;
+    private final AccountService accountService;
 
-    private ClientService() {}
+    private ClientService() {
+        this.accountService = AccountService.getInstance();
+    }
 
     public static ClientService getInstance() {
         if (instance == null) {
@@ -38,5 +41,24 @@ public class ClientService {
         for (Client client : clients) {
             System.out.println(client);
         }
+    }
+
+    public Client getClientByEmailAddress(String clientEmailAddress) throws Exception {
+        for (Client client : clients) {
+            if (client.getEmailAddress().equals(clientEmailAddress)) {
+                return client;
+            }
+        }
+        throw new Exception("Client with email address " + clientEmailAddress + " does not exist.");
+    }
+
+    public void openCheckingAccountForClient(String clientEmailAddress) throws Exception {
+        Client client = this.getClientByEmailAddress(clientEmailAddress);
+        accountService.openCheckingAccount(client);
+    }
+
+    public void showClientAccounts(String clientEmailAddress) throws Exception {
+        Client client = this.getClientByEmailAddress(clientEmailAddress);
+        accountService.showClientAccounts(client);
     }
 }

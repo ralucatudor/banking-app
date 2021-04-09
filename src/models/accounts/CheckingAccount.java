@@ -1,8 +1,14 @@
 package models.accounts;
 
+import models.client.Client;
+
 import java.math.BigDecimal;
 
 public class CheckingAccount extends Account {
+    public CheckingAccount(Client client) {
+        super(client);
+    }
+
     @Override
     public BigDecimal getDepositFee(BigDecimal amount) {
         return null;

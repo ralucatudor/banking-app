@@ -1,6 +1,7 @@
 package models.accounts;
 
 import models.card.Card;
+import models.client.Client;
 import utils.RandomGenerator;
 
 import java.math.BigDecimal;
@@ -18,13 +19,15 @@ public abstract class Account {
         }
     }
 
+    protected Client client;
     // {@code iban} refers to account number.
     protected final String iban;
     protected final LocalDateTime openDate;
     protected BigDecimal balance;
     protected final List<Card> cards = new ArrayList<>();
 
-    public Account() {
+    public Account(Client client) {
+        this.client = client;
         this.iban = RandomGenerator.getNumericString(AccountDetails.IBAN_SIZE.value);
         this.openDate = LocalDateTime.now();
         this.balance = BigDecimal.ZERO;
@@ -36,6 +39,10 @@ public abstract class Account {
 
     public abstract BigDecimal getTransferFee(BigDecimal amount);
 
+    public Client getClient() {
+        return client;
+    }
+
     /**
      * Deposit
      */
@@ -45,4 +52,31 @@ public abstract class Account {
      * Withdrawal
      */
     public abstract void deductFunds(BigDecimal amount);
+
+    public void createCard() {
+        cards.add(new Card());
+    }
+
+    /**
+     * Check if the account has a specific card associated.
+     */
+    public boolean hasCard(String cardNumber) {
+        for (Card card : cards) {
+            if (card.getNumber().equals(cardNumber)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "client=" + client +
+                ", iban='" + iban + '\'' +
+                ", openDate=" + openDate +
+                ", balance=" + balance +
+                ", cards=" + cards +
+                '}';
+    }
 }

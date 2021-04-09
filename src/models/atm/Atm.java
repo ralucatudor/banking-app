@@ -3,16 +3,16 @@ package models.atm;
 import utils.Address;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Atm {
     private final Address address;
     private BigDecimal funds;
+    private final String identifier;
 
-    public Atm(Address address, BigDecimal funds) {
+    public Atm(Address address, BigDecimal funds, String identifier) {
         this.address = address;
         this.funds = funds;
+        this.identifier = identifier;
     }
 
     public BigDecimal getFunds() {
@@ -21,6 +21,10 @@ public class Atm {
 
     public void setFunds(BigDecimal funds) {
         this.funds = funds;
+    }
+
+    public String getIdentifier() {
+        return identifier;
     }
 
     public boolean hasEnoughFundsForWithdrawal(BigDecimal amount) {

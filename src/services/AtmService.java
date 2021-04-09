@@ -1,7 +1,7 @@
 package services;
 
+import models.accounts.Account;
 import models.atm.Atm;
-import models.client.Client;
 import utils.Address;
 
 import java.math.BigDecimal;
@@ -16,8 +16,9 @@ public class AtmService {
         this.accountService = AccountService.getInstance();
     }
 
-    public void createAtm(Address address, BigDecimal initialFunds) {
-        Atm atm = new Atm(address, initialFunds);
+    public void createAtm(Address address, BigDecimal initialFunds, String identifier) {
+        Atm atm = new Atm(address, initialFunds, identifier);
+        atms.add(atm);
     }
 
     /**
@@ -30,6 +31,30 @@ public class AtmService {
         }
     }
 
-//    public void depositInAtm()
-//    public void depositInAccount()
+    public Atm getAtm(String identifier) throws Exception {
+        for (Atm atm : atms) {
+            if (atm.getIdentifier().equals(identifier)) {
+                return atm;
+            }
+        }
+        throw new Exception("ATM identifier " + identifier + " is invalid.");
+    }
+
+    public void depositInAtm(String atmIdentifier,
+                             BigDecimal amount) throws Exception {
+        Atm atm = this.getAtm(atmIdentifier);
+        atm.addFunds(amount);
+    }
+
+    public void depositInAccount(String atmIdentifier,
+                                 String cardNumber,
+                                 BigDecimal amount) throws Exception {
+        Atm atm = this.getAtm(atmIdentifier);
+        Account account = this.accountService.getAccountByCardNumber(cardNumber);
+
+        account.addFunds(amount);
+        atm.addFunds(amount);
+    }
+
+    // TODO Withdrawal
 }

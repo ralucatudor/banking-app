@@ -2,6 +2,7 @@ package services;
 
 import utils.Address;
 
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class BankingInteractor {
@@ -13,8 +14,11 @@ public class BankingInteractor {
     enum Queries {
         registerNewClient,
         showClients,
+        openCheckingAccountForClient,
+        showClientAccounts,
         createAtm,
         showAtms,
+        depositInAccount,
         exit
     }
 
@@ -41,7 +45,11 @@ public class BankingInteractor {
                     stopRunning = true;
                     System.out.println("Thank you for your time managing PAO Bank!");
                 }
+                case openCheckingAccountForClient -> openCheckingAccountInteractor(scanner);
+                case showClientAccounts -> showClientAccountsInteractor(scanner);
                 case createAtm -> createAtmInteract(scanner);
+                case showAtms -> atmService.showAtms();
+                case depositInAccount -> depositInAccountInteractor(scanner);
                 default ->
                         // TODO Handle this
                         System.out.println("hopa");
@@ -73,7 +81,10 @@ public class BankingInteractor {
 
     private Address readAddress(Scanner scanner) {
         System.out.println("Street address:");
-        String streetAddress = scanner.next();
+        // Read the '\n',
+        scanner.nextLine();
+        // so that the next line is successfully read.
+        String streetAddress = scanner.nextLine();
         System.out.println("City:");
         String city = scanner.next();
         System.out.println("Country:");
@@ -84,14 +95,61 @@ public class BankingInteractor {
         return new Address(streetAddress, city, country, postalCode);
     }
 
+    private String getClientIdentifier(Scanner scanner) {
+        System.out.println("Please enter the client's email address:");
+        return scanner.next();
+    }
+
+    private void openCheckingAccountInteractor(Scanner scanner) {
+        String clientIdentifier = getClientIdentifier(scanner);
+
+        try {
+            clientService.openCheckingAccountForClient(clientIdentifier);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showClientAccountsInteractor(Scanner scanner) {
+        String clientIdentifier = getClientIdentifier(scanner);
+
+        try {
+            clientService.showClientAccounts(clientIdentifier);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void createAtmInteract(Scanner scanner) {
         System.out.println("Please enter");
 
         System.out.println("Funds:");
-        String funds = scanner.next();
+        BigDecimal funds = new BigDecimal(scanner.next());
+
+        System.out.println("ATM identifier:");
+        String identifier = scanner.next();
 
         Address address = readAddress(scanner);
 
-        // clientService.createAtm????
+         atmService.createAtm(address, funds, identifier);
+    }
+
+    private void depositInAccountInteractor(Scanner scanner) {
+        System.out.println("Please enter");
+
+        System.out.println("ATM identifier:");
+        String atmIdentifier = scanner.next();
+
+        System.out.println("Card number:");
+        String cardNumber = scanner.next();
+
+        System.out.println("Amount:");
+        BigDecimal amount = new BigDecimal(scanner.next());
+
+        try {
+            atmService.depositInAccount(atmIdentifier, cardNumber, amount);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
