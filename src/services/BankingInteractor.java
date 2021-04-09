@@ -5,6 +5,9 @@ import utils.Address;
 import java.math.BigDecimal;
 import java.util.Scanner;
 
+/**
+ * Makes the app run and do stuff, based on user input :)
+ */
 public class BankingInteractor {
     private final ClientService clientService;
     private final AtmService atmService;
@@ -13,19 +16,24 @@ public class BankingInteractor {
 
     // Possible actions, held in an enum for cleaner code.
     enum Queries {
-        registerNewClient,
-        showClients,
-        openCheckingAccountForClient,
-        showClientAccounts,
-        createAtm,
-        showAtms,
-        depositInAccount,
-        makeTransfer,
-        showTransfersForAccount,
-        showAllTransfers,
-        showLinkedCards,
-        addCardToAccount,
-        exit
+        registerNewClient("Register a new client."),
+        showClients("Show all clients."),
+        openCheckingAccountForClient("Open Checking Account for a client."),
+        showClientAccounts("Show client accounts."),
+        createAtm("Create ATM."),
+        showAtms("Show all ATMs."),
+        depositInAccount("Deposit funds in an account."),
+        makeTransfer("Make a transfer between two accounts."),
+        showTransfersForAccount("Show transfers for an account."),
+        showAllTransfers("Show all transfers."),
+        showLinkedCards("Show cards linked to an account."),
+        addCardToAccount("Add another card to an account."),
+        exit("Exit");
+
+        public final String query;
+        Queries(String query) {
+            this.query = query;
+        }
     }
 
     public BankingInteractor() {
@@ -41,7 +49,7 @@ public class BankingInteractor {
         while (!stopRunning) {
             System.out.println("Choose one of the following actions: ");
             for (int i = 0; i < Queries.values().length; i++) {
-                System.out.println((i+1) + ") " + Queries.values()[i]);
+                System.out.println((i+1) + ") " + Queries.values()[i].query);
             }
             System.out.println("I'll go with option: ");
 

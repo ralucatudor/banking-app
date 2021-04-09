@@ -8,5 +8,7 @@ public class Main {
 
         BankingInteractor bankingInteractor = new BankingInteractor();
         bankingInteractor.run(scanner);
+
+        scanner.close();
     }
 }
