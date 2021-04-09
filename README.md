@@ -1,4 +1,9 @@
 # banking-app
+![GitHub last commit](https://img.shields.io/github/last-commit/ralucatudor/banking-app.svg)
+![GitHub top language](https://img.shields.io/github/languages/top/ralucatudor/banking-app.svg)
+![TLOC](https://tokei.rs/b1/github/ralucatudor/banking-app)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/ralucatudor/banking-app.svg)
+
 
 This CLI application simulates a simple banking management terminal.
 Note that this app is designed to be used for managing the services of an imaginary bank (let's call it *PAO Bank*) and not to be used by a customer of a bank, therefore not having a login functionality.
@@ -44,15 +49,14 @@ To implement:
     - class BankingInteractor
 - class Main (uses class BankingService)
 
-Notes:
+## Notes
 The withdrawal function should only work if the bank account has enough money to withdraw a requested amount.
 
-## Actions
-
-Thoughts
+Thoughts:
 - Builder pattern?
 - use interfaces for services
 - Add currency class?
+- Generate a UML?
 
 Later on:
 - JUnit testing - mocking / test doubles
@@ -62,7 +66,7 @@ Later on:
 - Better handle exceptions?
 
 Notes
-- time has been preferred to Date [useful article](https://stackabuse.com/how-to-get-current-date-and-time-in-java/)
-- I chose to not implement a class with constants or declare my constants as static final, but instead, I used enums.
+- Date is obsolete. LocalDateTime/ LocalDateTime has been used. See [useful article](https://stackabuse.com/how-to-get-current-date-and-time-in-java/)
+- I chose to not implement a class with constants or declare all constants as static final, but instead, I used enums.
   [useful article](https://tedvinke.wordpress.com/2016/04/14/2-rookie-java-constants-and-enums-pitfalls/)
-- Used BigDecimal s for balance instead of double - because floating point values are not precise.
+- Used `BigDecimal` for balance/ other money related variables instead of double - because floating point values are not precise.
