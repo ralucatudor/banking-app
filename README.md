@@ -5,23 +5,24 @@
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/ralucatudor/banking-app.svg)
 
 
-This CLI application simulates a simple banking management terminal.
-Note that this app is designed to be used for managing the services of an imaginary bank (let's call it *PAO Bank*) and not to be used by a customer of a bank, therefore not having a login functionality.
+This **CLI application** simulates a simple **banking management** terminal.
+
+Note that this app is designed to be used for managing the services of an imaginary bank (let's call it *PAO Bank*) and not to be used by a customer of a bank, therefore not having an Authentication functionality.
 
 ## Project Timeline
 ### 1st Phase
 
 #### Requirements
 System with
-- at least 10 actions/ queries that can be made;
-- at least 8 types of objects.
+- [x] at least 10 actions/ queries that can be made;
+- [x] at least 8 types of objects.
 
 To implement:
-- classes having private/ protected data members & access methods.
-- at least 2 distinct collections for managing the objects defined previously (e.g. List, Set, Map, etc.) - and at least 1 sorted (implement Comparable).
-- use inheritance.
-- at least 1 service class exposing the actions.
-- 1 Main class - making calls to the services.
+- [x] classes having private/ protected data members & access methods.
+- [x] at least 2 distinct collections (I used List/ArrayList and TreeSet) for managing the objects defined previously (e.g. List, Set, Map, etc.) - and at least 1 sorted (TreeSet).
+- [x] use inheritance.
+- [x] at least 1 service class exposing the actions.
+- [x] 1 Main class - making calls to the services.
 
 ## Structure
 - package accounts
