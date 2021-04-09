@@ -1,16 +1,14 @@
 package services;
 
-import models.transfer.Transfer;
 import utils.Address;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class BankingInteractor {
-    // private ??
-    public final ClientService clientService;
-    public final AtmService atmService;
-    public final AccountService accountService;
+    private final ClientService clientService;
+    private final AtmService atmService;
+    private final AccountService accountService;
     private final TransferService transferService;
 
     // Actions

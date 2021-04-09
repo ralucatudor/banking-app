@@ -8,8 +8,8 @@ import java.math.BigDecimal;
  * Add funds to an account.
  */
 public class Deposit extends AtmTransaction {
-    public Deposit(BigDecimal amount, String description, Account account, Atm atm) {
-        super(amount, description, account, atm);
+    public Deposit(BigDecimal amount, Account account, Atm atm) {
+        super(amount, account, atm);
     }
 
     @Override

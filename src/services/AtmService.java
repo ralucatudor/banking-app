@@ -2,6 +2,9 @@ package services;
 
 import models.accounts.Account;
 import models.atm.Atm;
+import models.atm.AtmTransaction;
+import models.atm.Deposit;
+import models.atm.Withdrawal;
 import utils.Address;
 
 import java.math.BigDecimal;
@@ -10,6 +13,7 @@ import java.util.List;
 
 public class AtmService {
     private final List<Atm> atms = new ArrayList<>();
+    private final List<AtmTransaction> atmTransactions = new ArrayList<>();
     private final AccountService accountService;
 
     public AtmService() {
@@ -46,15 +50,35 @@ public class AtmService {
         atm.addFunds(amount);
     }
 
+    public void withdrawFromAtm(String atmIdentifier,
+                                BigDecimal amount) throws Exception {
+        Atm atm = this.getAtm(atmIdentifier);
+        atm.deductFunds(amount);
+    }
+
     public void depositInAccount(String atmIdentifier,
                                  String cardNumber,
                                  BigDecimal amount) throws Exception {
         Atm atm = this.getAtm(atmIdentifier);
         Account account = this.accountService.getAccountByCardNumber(cardNumber);
 
-        account.addFunds(amount);
-        atm.addFunds(amount);
+        AtmTransaction atmTransaction = new Deposit(amount, account, atm);
+        atmTransaction.execute();
+        atmTransactions.add(atmTransaction);
     }
 
-    // TODO Withdrawal
+    public void withdrawFromAccount(String atmIdentifier,
+                                    String cardNumber,
+                                    BigDecimal amount) throws Exception {
+        Atm atm = this.getAtm(atmIdentifier);
+        Account account = this.accountService.getAccountByCardNumber(cardNumber);
+
+        AtmTransaction atmTransaction = new Withdrawal(amount, account, atm);
+        atmTransaction.execute();
+        atmTransactions.add(atmTransaction);
+    }
+
+    public List<AtmTransaction> getAtmTransactions() {
+        return atmTransactions;
+    }
 }

@@ -9,8 +9,8 @@ import java.math.BigDecimal;
  */
 public class Withdrawal extends AtmTransaction {
 
-    public Withdrawal(BigDecimal amount, String description, Account account, Atm atm) {
-        super(amount, description, account, atm);
+    public Withdrawal(BigDecimal amount, Account account, Atm atm) {
+        super(amount, account, atm);
     }
 
     @Override

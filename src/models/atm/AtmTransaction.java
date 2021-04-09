@@ -11,7 +11,7 @@ public abstract class AtmTransaction {
     protected Account account;
     protected Atm atm;
 
-    public AtmTransaction(BigDecimal amount, String description, Account account, Atm atm) {
+    public AtmTransaction(BigDecimal amount, Account account, Atm atm) {
         this.date = LocalDateTime.now();
         this.amount = amount;
         this.account = account;
