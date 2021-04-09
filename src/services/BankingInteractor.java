@@ -19,10 +19,13 @@ public class BankingInteractor {
         registerNewClient("Register a new client."),
         showClients("Show all clients."),
         openCheckingAccountForClient("Open Checking Account for a client."),
+        openSavingsAccountForClient("Open Savings Account for a client."),
         showClientAccounts("Show client accounts."),
         createAtm("Create ATM."),
+        depositToAtm("Deposit funds to ATM (as ATM manager)."),
         showAtms("Show all ATMs."),
-        depositInAccount("Deposit funds in an account."),
+        depositToAccount("Deposit funds to an account."),
+        withdrawFromAccount("Withdraw funds from an account."),
         makeTransfer("Make a transfer between two accounts."),
         showTransfersForAccount("Show transfers for an account."),
         showAllTransfers("Show all transfers."),
@@ -68,10 +71,13 @@ public class BankingInteractor {
                     System.out.println("Thank you for your time managing PAO Bank!");
                 }
                 case openCheckingAccountForClient -> openCheckingAccountInteractor(scanner);
+                case openSavingsAccountForClient -> openSavingsAccountInteractor(scanner);
                 case showClientAccounts -> showClientAccountsInteractor(scanner);
                 case createAtm -> createAtmInteract(scanner);
+                case depositToAtm -> depositToAtmInteractor(scanner);
                 case showAtms -> atmService.showAtms();
-                case depositInAccount -> depositInAccountInteractor(scanner);
+                case depositToAccount -> depositToAccountInteractor(scanner);
+                case withdrawFromAccount -> withdrawFromAccountInteractor(scanner);
                 case makeTransfer -> makeTransferInteractor(scanner);
                 case showTransfersForAccount -> showTransfersForAccountInteractor(scanner);
                 case showAllTransfers -> transferService.showTransfers();
@@ -137,6 +143,17 @@ public class BankingInteractor {
         }
     }
 
+    private void openSavingsAccountInteractor(Scanner scanner) {
+        String clientIdentifier = getClientIdentifier(scanner);
+
+        try {
+            clientService.openSavingsAccountForClient(clientIdentifier);
+            System.out.println("Successfully opened savings account!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void showClientAccountsInteractor(Scanner scanner) {
         String clientIdentifier = getClientIdentifier(scanner);
 
@@ -150,11 +167,11 @@ public class BankingInteractor {
     private void createAtmInteract(Scanner scanner) {
         System.out.println("Please enter");
 
-        System.out.println("Funds:");
-        BigDecimal funds = new BigDecimal(scanner.next());
-
         System.out.println("ATM identifier:");
         String identifier = scanner.next();
+
+        System.out.println("Funds:");
+        BigDecimal funds = new BigDecimal(scanner.next());
 
         Address address = readAddress(scanner);
 
@@ -162,7 +179,25 @@ public class BankingInteractor {
         System.out.println("Successfully created ATM!");
     }
 
-    private void depositInAccountInteractor(Scanner scanner) {
+    private void depositToAtmInteractor(Scanner scanner) {
+        System.out.println("Please enter");
+
+        System.out.println("ATM identifier:");
+        String identifier = scanner.next();
+
+        System.out.println("Amount:");
+        BigDecimal amount = new BigDecimal(scanner.next());
+
+        try {
+            atmService.depositToAtm(identifier, amount);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Successfully added funds to ATM!");
+    }
+
+    private void depositToAccountInteractor(Scanner scanner) {
         System.out.println("Please enter");
 
         System.out.println("ATM identifier:");
@@ -175,8 +210,28 @@ public class BankingInteractor {
         BigDecimal amount = new BigDecimal(scanner.next());
 
         try {
-            atmService.depositInAccount(atmIdentifier, cardNumber, amount);
-            System.out.println("Successfully added funds in the linked account!");
+            atmService.depositToAccount(atmIdentifier, cardNumber, amount);
+            System.out.println("Successfully added funds to the linked account!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void withdrawFromAccountInteractor(Scanner scanner) {
+        System.out.println("Please enter");
+
+        System.out.println("ATM identifier:");
+        String atmIdentifier = scanner.next();
+
+        System.out.println("Card number:");
+        String cardNumber = scanner.next();
+
+        System.out.println("Amount:");
+        BigDecimal amount = new BigDecimal(scanner.next());
+
+        try {
+            atmService.withdrawFromAccount(atmIdentifier, cardNumber, amount);
+            System.out.println("Successfully withdrawn funds from the linked account!");
         } catch (Exception e) {
             e.printStackTrace();
         }

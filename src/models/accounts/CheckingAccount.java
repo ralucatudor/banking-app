@@ -41,4 +41,15 @@ public class CheckingAccount extends Account {
         }
         this.balance = this.balance.subtract(toDeduct);
     }
+
+    @Override
+    public String toString() {
+        return "CheckingAccount{" +
+                "client=" + client +
+                ", iban='" + iban + '\'' +
+                ", openDate=" + openDate +
+                ", balance=" + balance +
+                ", cards=" + cards +
+                '}';
+    }
 }

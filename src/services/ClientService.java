@@ -55,6 +55,11 @@ public class ClientService {
         accountService.openCheckingAccount(client);
     }
 
+    public void openSavingsAccountForClient(String clientEmailAddress) throws Exception {
+        Client client = this.getClientByEmailAddress(clientEmailAddress);
+        accountService.openSavingsAccount(client);
+    }
+
     public void showClientAccounts(String clientEmailAddress) throws Exception {
         Client client = this.getClientByEmailAddress(clientEmailAddress);
         accountService.showClientAccounts(client);

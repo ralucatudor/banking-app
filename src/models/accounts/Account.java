@@ -28,11 +28,11 @@ public abstract class Account {
     // {@code client} refers to the account holder.
     protected Client client;
     // {@code iban} refers to account number.
-    protected final String iban;
-    protected final LocalDateTime openDate;
+    protected String iban;
+    protected LocalDateTime openDate;
     protected BigDecimal balance;
     // Note: when an account is opened, a card is linked to it by default.
-    protected final List<Card> cards = new ArrayList<>();
+    protected List<Card> cards = new ArrayList<>();
 
     public Account(Client client) {
         this.client = client;

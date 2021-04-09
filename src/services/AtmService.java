@@ -47,7 +47,7 @@ public class AtmService {
         throw new Exception("ATM identifier " + identifier + " is invalid.");
     }
 
-    public void depositInAtm(String atmIdentifier,
+    public void depositToAtm(String atmIdentifier,
                              BigDecimal amount) throws Exception {
         Atm atm = this.getAtm(atmIdentifier);
         atm.addFunds(amount);
@@ -59,7 +59,7 @@ public class AtmService {
         atm.deductFunds(amount);
     }
 
-    public void depositInAccount(String atmIdentifier,
+    public void depositToAccount(String atmIdentifier,
                                  String cardNumber,
                                  BigDecimal amount) throws Exception {
         Atm atm = this.getAtm(atmIdentifier);

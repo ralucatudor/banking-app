@@ -33,4 +33,15 @@ public class SavingsAccount extends Account {
     public void deductFunds(BigDecimal amount) throws Exception {
         throw new Exception("Unable to withdraw money from savings account!");
     }
+
+    @Override
+    public String toString() {
+        return "SavingsAccount{" +
+                "client=" + client +
+                ", iban='" + iban + '\'' +
+                ", openDate=" + openDate +
+                ", balance=" + balance +
+                ", cards=" + cards +
+                '}';
+    }
 }
