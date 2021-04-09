@@ -11,26 +11,26 @@ public class SavingsAccount extends Account {
 
     @Override
     public BigDecimal getDepositFee(BigDecimal amount) {
-        return null;
+        return BigDecimal.ZERO;
     }
 
     @Override
     public BigDecimal getWithdrawalFee(BigDecimal amount) {
-        return null;
+        return BigDecimal.ZERO;
     }
 
     @Override
     public BigDecimal getTransferFee(BigDecimal amount) {
-        return null;
+        return BigDecimal.ZERO;
     }
 
     @Override
     public void addFunds(BigDecimal amount) {
-
+        this.balance = this.balance.add(amount);
     }
 
     @Override
-    public void deductFunds(BigDecimal amount) {
-
+    public void deductFunds(BigDecimal amount) throws Exception {
+        throw new Exception("Unable to withdraw money from savings account!");
     }
 }

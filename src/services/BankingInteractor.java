@@ -11,7 +11,7 @@ public class BankingInteractor {
     private final AccountService accountService;
     private final TransferService transferService;
 
-    // Actions
+    // Possible actions, held in an enum for cleaner code.
     enum Queries {
         registerNewClient,
         showClients,
@@ -46,6 +46,12 @@ public class BankingInteractor {
             System.out.println("I'll go with option: ");
 
             int queryIdx = scanner.nextInt() - 1;
+
+            if (queryIdx > Queries.values().length) {
+                System.out.println("Please choose one of the available options!");
+                continue;
+            }
+
             switch (Queries.values()[queryIdx]) {
                 case registerNewClient -> registerNewClientInteract(scanner);
                 case showClients -> clientService.showClients();
@@ -63,9 +69,6 @@ public class BankingInteractor {
                 case showAllTransfers -> transferService.showTransfers();
                 case showLinkedCards -> showLinkedCardsInteractor(scanner);
                 case addCardToAccount -> addCardToAccountInteractor(scanner);
-                default ->
-                        // TODO Handle this
-                        System.out.println("hopa");
             }
         }
     }

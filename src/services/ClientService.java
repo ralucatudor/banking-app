@@ -7,10 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Singleton class.
+ * Singleton class for managing bank clients.
  */
 public class ClientService {
-    // TODO tine map in loc de list?
     private final List<Client> clients = new ArrayList<>();
     private static ClientService instance = null;
     private final AccountService accountService;
@@ -47,7 +46,8 @@ public class ClientService {
                 return client;
             }
         }
-        throw new Exception("Client with email address " + clientEmailAddress + " does not exist.");
+        throw new Exception(
+                "Client with email address " + clientEmailAddress + " does not exist.");
     }
 
     public void openCheckingAccountForClient(String clientEmailAddress) throws Exception {

@@ -1,7 +1,7 @@
 # banking-app
 
 This CLI application simulates a simple banking management terminal.
-Note that this app is designed to be used for managing the services of an imaginary bank (let's call it PAO Bank) and not to be used by a customer of a bank, therefore not having a login functionality.
+Note that this app is designed to be used for managing the services of an imaginary bank (let's call it *PAO Bank*) and not to be used by a customer of a bank, therefore not having a login functionality.
 
 ## Project Timeline
 ### 1st Phase
@@ -49,19 +49,17 @@ The withdrawal function should only work if the bank account has enough money to
 
 ## Actions
 
-TODOs
+Thoughts
 - Builder pattern?
-- exception handling
-- add javadocs
 - use interfaces for services
-- Builder class?
-- Add currency class
-- Logging class?
-  final:
-- JUnit testing
+- Add currency class?
 
 Later on:
+- JUnit testing - mocking / test doubles
 - add GUI?
+- use UUID?
+- Logging class?
+- Better handle exceptions?
 
 Notes
 - time has been preferred to Date [useful article](https://stackabuse.com/how-to-get-current-date-and-time-in-java/)

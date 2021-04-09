@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Singleton class.
+ * Singleton class for managing banking accounts.
  */
 public class AccountService {
     private static AccountService instance = null;
@@ -24,12 +24,24 @@ public class AccountService {
         return instance;
     }
 
+    /**
+     * Opens a checking account for a specified client and implicitly link a
+     * card to that account.
+     *
+     * Called from the ClientService method for opening a Checking Account.
+     */
     public void openCheckingAccount(Client client) {
         Account account = AccountFactory.getAccount("checking", client);
         account.createCard();
         accounts.add(account);
     }
 
+    /**
+     * Opens a savings account for a specified client and implicitly link a
+     * card to that account.
+     *
+     * Called from the ClientService method for opening a Savings Account.
+     */
     public void openSavingsAccount(Client client) {
         Account account = AccountFactory.getAccount("savings", client);
         account.createCard();
@@ -65,7 +77,7 @@ public class AccountService {
     }
 
     /**
-     * Displays cards linked to an account.
+     * Displays all cards linked to an account.
      */
     public void showLinkedCards(String iban) throws Exception {
         Account account = getAccountByIban(iban);
@@ -75,7 +87,7 @@ public class AccountService {
     }
 
     /**
-     * Adds another card to an account.
+     * Adds/ links another card to an account.
      */
     public void addCard(String iban) throws Exception {
         Account account = getAccountByIban(iban);

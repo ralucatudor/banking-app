@@ -32,13 +32,13 @@ public class CheckingAccount extends Account {
         this.balance = this.balance.add(amount).add(getDepositFee(amount));
     }
 
-    public void deductFunds(BigDecimal amount) {
+    public void deductFunds(BigDecimal amount) throws Exception {
         assert amount.signum() > 0;
         // Check if current balance is at least equal to {@code amount}.
         BigDecimal toDeduct = amount.add(getWithdrawalFee(amount));
-//        if (this.balance.compareTo(toDeduct) < 0) {
-//            throw new Exception("Not enough funds for withdrawal.");
-//        }
+        if (this.balance.compareTo(toDeduct) < 0) {
+            throw new Exception("Not enough funds for withdrawal.");
+        }
         this.balance = this.balance.subtract(toDeduct);
     }
 }

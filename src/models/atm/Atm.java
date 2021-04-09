@@ -4,6 +4,9 @@ import utils.Address;
 
 import java.math.BigDecimal;
 
+/**
+ * Simulates an ATM.
+ */
 public class Atm {
     private final Address address;
     private BigDecimal funds;

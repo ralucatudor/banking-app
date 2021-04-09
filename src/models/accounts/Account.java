@@ -15,6 +15,7 @@ import java.util.List;
  * with the account.
  */
 public abstract class Account {
+    // Use enum for holding constants.
     enum AccountDetails {
         IBAN_SIZE(16), INITIAL_BALANCE(0);
 
@@ -30,6 +31,7 @@ public abstract class Account {
     protected final String iban;
     protected final LocalDateTime openDate;
     protected BigDecimal balance;
+    // Note: when an account is opened, a card is linked to it by default.
     protected final List<Card> cards = new ArrayList<>();
 
     public Account(Client client) {
@@ -65,7 +67,7 @@ public abstract class Account {
     /**
      * Simulates making a withdrawal from the account, updating {@code balance}.
      */
-    public abstract void deductFunds(BigDecimal amount);
+    public abstract void deductFunds(BigDecimal amount) throws Exception;
 
     /**
      * Appends a new card to the list of cards linked to the account.

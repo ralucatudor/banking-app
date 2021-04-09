@@ -5,6 +5,11 @@ import models.accounts.Account;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Represents the transaction that a customer can make at an ATM - managing the funds
+ * from his own account.
+ * Skeleton for Deposit and Withdrawal.
+ */
 public abstract class AtmTransaction {
     protected LocalDateTime date;
     protected BigDecimal amount;
@@ -18,5 +23,5 @@ public abstract class AtmTransaction {
         this.atm = atm;
     }
 
-    public abstract void execute();
+    public abstract void execute() throws Exception;
 }

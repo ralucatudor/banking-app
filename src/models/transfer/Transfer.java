@@ -6,7 +6,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * Move funds from one account to another.
+ * Represents a transaction that holds place between two accounts -
+ * when money is sent from one bank account to another.
  */
 public class Transfer implements Comparable<Transfer> {
     private final LocalDateTime date;
@@ -34,7 +35,10 @@ public class Transfer implements Comparable<Transfer> {
         return destinationAccount;
     }
 
-    public void execute() {
+    /**
+     * Moves funds from one account to another.
+     */
+    public void execute() throws Exception {
         sourceAccount.deductFunds(amount.add(sourceAccount.getTransferFee(amount)));
         destinationAccount.addFunds(amount);
     }

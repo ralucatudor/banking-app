@@ -4,6 +4,9 @@ import utils.Address;
 
 import java.time.LocalDateTime;
 
+/**
+ * Holds information about a bank customer (in this design, an account holder).
+ */
 public class Client {
     private final String firstName;
     private final String lastName;
@@ -11,7 +14,10 @@ public class Client {
     private final Address address;
     private final LocalDateTime registrationDate;
 
-    public Client(String firstName, String lastName, String emailAddress, Address address) {
+    public Client(String firstName,
+                  String lastName,
+                  String emailAddress,
+                  Address address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;

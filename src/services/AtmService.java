@@ -11,6 +11,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Manages ATM services.
+ */
 public class AtmService {
     private final List<Atm> atms = new ArrayList<>();
     private final List<AtmTransaction> atmTransactions = new ArrayList<>();

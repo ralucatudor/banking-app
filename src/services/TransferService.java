@@ -9,7 +9,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 /**
- * Singleton class.
+ * Singleton class for managing banking transfers.
  */
 public class TransferService {
     private static TransferService instance = null;
@@ -34,7 +34,7 @@ public class TransferService {
         Account sourceAccount = this.accountService.getAccountByIban(sourceIban);
         Account destinationAccount = this.accountService.getAccountByIban(destinationIban);
 
-        if (!sourceAccount.hasEnoughFundsForWithdrawal(amount)) {
+        if (!sourceAccount.hasEnoughFundsForWithdrawal(amount.add(sourceAccount.getTransferFee(amount)))) {
             throw new Exception("Cannot make transfer. Not enough funds.");
         }
 
