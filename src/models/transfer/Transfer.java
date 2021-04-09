@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 /**
  * Move funds from one account to another.
  */
-public class Transfer {
+public class Transfer implements Comparable<Transfer> {
     private LocalDateTime date;
     private BigDecimal amount;
     private String description;
@@ -26,8 +26,32 @@ public class Transfer {
         this.destinationAccount = destinationAccount;
     }
 
+    public Account getSourceAccount() {
+        return sourceAccount;
+    }
+
+    public Account getDestinationAccount() {
+        return destinationAccount;
+    }
+
     public void execute() {
         sourceAccount.deductFunds(amount);
         destinationAccount.addFunds(amount);
+    }
+
+    @Override
+    public int compareTo(Transfer o) {
+        return date.compareTo(o.date);
+    }
+
+    @Override
+    public String toString() {
+        return "Transfer{" +
+                "date=" + date +
+                ", amount=" + amount +
+                ", description='" + description + '\'' +
+                ", sourceAccount=" + sourceAccount +
+                ", destinationAccount=" + destinationAccount +
+                '}';
     }
 }

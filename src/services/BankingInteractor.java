@@ -1,5 +1,6 @@
 package services;
 
+import models.transfer.Transfer;
 import utils.Address;
 
 import java.math.BigDecimal;
@@ -10,6 +11,7 @@ public class BankingInteractor {
     public final ClientService clientService;
     public final AtmService atmService;
     public final AccountService accountService;
+    private final TransferService transferService;
 
     // Actions
     enum Queries {
@@ -20,6 +22,9 @@ public class BankingInteractor {
         createAtm,
         showAtms,
         depositInAccount,
+        makeTransfer,
+        showTransfersForAccount,
+        showAllTransfers,
         showLinkedCards,
         addCardToAccount,
         exit
@@ -28,6 +33,7 @@ public class BankingInteractor {
     public BankingInteractor() {
         this.clientService = ClientService.getInstance();
         this.accountService = AccountService.getInstance();
+        this.transferService = TransferService.getInstance();
         this.atmService = new AtmService(); // make singleton?
     }
 
@@ -54,6 +60,9 @@ public class BankingInteractor {
                 case createAtm -> createAtmInteract(scanner);
                 case showAtms -> atmService.showAtms();
                 case depositInAccount -> depositInAccountInteractor(scanner);
+                case makeTransfer -> makeTransferInteractor(scanner);
+                case showTransfersForAccount -> showTransfersForAccountInteractor(scanner);
+                case showAllTransfers -> transferService.showTransfers();
                 case showLinkedCards -> showLinkedCardsInteractor(scanner);
                 case addCardToAccount -> addCardToAccountInteractor(scanner);
                 default ->
@@ -159,6 +168,41 @@ public class BankingInteractor {
         try {
             atmService.depositInAccount(atmIdentifier, cardNumber, amount);
             System.out.println("Successfully added funds in the linked account!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void makeTransferInteractor(Scanner scanner) {
+        System.out.println("Please enter");
+
+        System.out.println("Sender IBAN:");
+        String senderIban = scanner.next();
+
+        System.out.println("Receiver IBAN:");
+        String receiverIban = scanner.next();
+
+        System.out.println("Transfer description:");
+        String description = scanner.next();
+
+        System.out.println("Amount:");
+        BigDecimal amount = new BigDecimal(scanner.next());
+
+        try {
+            transferService.makeTransfer(senderIban, receiverIban, amount, description);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showTransfersForAccountInteractor(Scanner scanner) {
+        System.out.println("Please enter");
+
+        System.out.println("IBAN:");
+        String iban = scanner.next();
+
+        try {
+            transferService.showTransfersForAccount(iban);
         } catch (Exception e) {
             e.printStackTrace();
         }

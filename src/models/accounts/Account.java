@@ -77,6 +77,11 @@ public abstract class Account {
         return false;
     }
 
+    public boolean hasEnoughFundsForWithdrawal(BigDecimal amount) {
+        // {@code amount} must be <= {@code this.balance}.
+        return amount.compareTo(this.balance) <= 0;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
