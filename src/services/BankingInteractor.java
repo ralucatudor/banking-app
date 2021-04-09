@@ -5,17 +5,22 @@ import utils.Address;
 import java.util.Scanner;
 
 public class BankingInteractor {
+    // private ??
     public final ClientService clientService;
+    public final AtmService atmService;
 
     // Actions
     enum Queries {
         registerNewClient,
         showClients,
+        createAtm,
+        showAtms,
         exit
     }
 
     public BankingInteractor() {
         this.clientService = ClientService.getInstance();
+        this.atmService = new AtmService(); // make singleton?
     }
 
     public void run(Scanner scanner) {
@@ -36,6 +41,7 @@ public class BankingInteractor {
                     stopRunning = true;
                     System.out.println("Thank you for your time managing PAO Bank!");
                 }
+                case createAtm -> createAtmInteract(scanner);
                 default ->
                         // TODO Handle this
                         System.out.println("hopa");
@@ -76,5 +82,16 @@ public class BankingInteractor {
         String postalCode = scanner.next();
 
         return new Address(streetAddress, city, country, postalCode);
+    }
+
+    private void createAtmInteract(Scanner scanner) {
+        System.out.println("Please enter");
+
+        System.out.println("Funds:");
+        String funds = scanner.next();
+
+        Address address = readAddress(scanner);
+
+        // clientService.createAtm????
     }
 }

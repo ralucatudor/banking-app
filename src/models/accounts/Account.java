@@ -30,19 +30,19 @@ public abstract class Account {
         this.balance = BigDecimal.ZERO;
     }
 
+    public abstract BigDecimal getDepositFee(BigDecimal amount);
+
+    public abstract BigDecimal getWithdrawalFee(BigDecimal amount);
+
+    public abstract BigDecimal getTransferFee(BigDecimal amount);
+
     /**
      * Deposit
      */
-    public void addFunds(BigDecimal amount) {
-        this.balance = this.balance.add(amount);
-    }
+    public abstract void addFunds(BigDecimal amount);
 
     /**
      * Withdrawal
      */
-    public void deductFunds(BigDecimal amount) {
-        assert amount.signum() > 0;
-        // TODO: Check if current balance is at least equal to {@code amount}.
-        this.balance = this.balance.subtract(amount);
-    }
+    public abstract void deductFunds(BigDecimal amount);
 }
