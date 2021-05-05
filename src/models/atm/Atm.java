@@ -51,6 +51,7 @@ public class Atm {
         return "Atm{" +
                 "address=" + address +
                 ", funds=" + funds +
+                ", identifier='" + identifier + '\'' +
                 '}';
     }
 }

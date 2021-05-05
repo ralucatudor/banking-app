@@ -13,6 +13,7 @@ public class BankingInteractor {
     private final AtmService atmService;
     private final AccountService accountService;
     private final TransferService transferService;
+    private final AuditService auditService;
 
     // Possible actions, held in an enum for cleaner code.
     enum Queries {
@@ -43,6 +44,7 @@ public class BankingInteractor {
         this.clientService = ClientService.getInstance();
         this.accountService = AccountService.getInstance();
         this.transferService = TransferService.getInstance();
+        this.auditService = AuditService.getInstance();
         this.atmService = new AtmService(); // make singleton?
     }
 
@@ -107,6 +109,7 @@ public class BankingInteractor {
                 lastName,
                 emailAddress,
                 address);
+        auditService.logEvent("register new client");
 
         System.out.println("Successfully registered client!");
     }
@@ -137,6 +140,7 @@ public class BankingInteractor {
 
         try {
             clientService.openCheckingAccountForClient(clientIdentifier);
+            auditService.logEvent("open checking account");
             System.out.println("Successfully opened checking account!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -148,6 +152,7 @@ public class BankingInteractor {
 
         try {
             clientService.openSavingsAccountForClient(clientIdentifier);
+            auditService.logEvent("open savings account");
             System.out.println("Successfully opened savings account!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -159,6 +164,7 @@ public class BankingInteractor {
 
         try {
             clientService.showClientAccounts(clientIdentifier);
+            auditService.logEvent("show client's account");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -176,6 +182,7 @@ public class BankingInteractor {
         Address address = readAddress(scanner);
 
         atmService.createAtm(address, funds, identifier);
+        auditService.logEvent("create atm");
         System.out.println("Successfully created ATM!");
     }
 
@@ -190,6 +197,7 @@ public class BankingInteractor {
 
         try {
             atmService.depositToAtm(identifier, amount);
+            auditService.logEvent("deposit to atm");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -211,6 +219,7 @@ public class BankingInteractor {
 
         try {
             atmService.depositToAccount(atmIdentifier, cardNumber, amount);
+            auditService.logEvent("deposit to account using atm");
             System.out.println("Successfully added funds to the linked account!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -231,6 +240,7 @@ public class BankingInteractor {
 
         try {
             atmService.withdrawFromAccount(atmIdentifier, cardNumber, amount);
+            auditService.logEvent("withdraw from account using atm");
             System.out.println("Successfully withdrawn funds from the linked account!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -254,6 +264,7 @@ public class BankingInteractor {
 
         try {
             transferService.makeTransfer(senderIban, receiverIban, amount, description);
+            auditService.logEvent("make transfer");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -267,6 +278,7 @@ public class BankingInteractor {
 
         try {
             transferService.showTransfersForAccount(iban);
+            auditService.logEvent("show transfers for account");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -280,6 +292,7 @@ public class BankingInteractor {
 
         try {
             accountService.showLinkedCards(iban);
+            auditService.logEvent("show linked cards for account");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -293,6 +306,7 @@ public class BankingInteractor {
 
         try {
             accountService.addCard(iban);
+            auditService.logEvent("add card to account");
             System.out.println("Successfully added another card to the specified account!");
         } catch (Exception e) {
             e.printStackTrace();
