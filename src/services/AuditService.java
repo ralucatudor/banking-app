@@ -11,9 +11,9 @@ import java.util.List;
  */
 public class AuditService {
     private static AuditService instance = null;
-    private FileWriterService fileWriterService;
+    private CsvWriterService csvWriterService;
 
-    private AuditService() { this.fileWriterService = FileWriterService.getInstance(); }
+    private AuditService() { this.csvWriterService = CsvWriterService.getInstance(); }
 
     public static AuditService getInstance() {
         if (instance == null) {
@@ -31,7 +31,7 @@ public class AuditService {
         toWrite.add(eventName);
 
         try {
-            fileWriterService.writeToFile("data\\audit.csv", toWrite);
+            csvWriterService.write("data\\audit.csv", toWrite);
         } catch (IOException e) {
             e.printStackTrace();
         }

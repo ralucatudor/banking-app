@@ -7,6 +7,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         BankingInteractor bankingInteractor = new BankingInteractor();
+        bankingInteractor.loadDataFromCsv();
         bankingInteractor.run(scanner);
 
         scanner.close();

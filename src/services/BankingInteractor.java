@@ -2,6 +2,7 @@ package services;
 
 import utils.Address;
 
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.util.Scanner;
 
@@ -45,7 +46,16 @@ public class BankingInteractor {
         this.accountService = AccountService.getInstance();
         this.transferService = TransferService.getInstance();
         this.auditService = AuditService.getInstance();
-        this.atmService = new AtmService(); // make singleton?
+        this.atmService = new AtmService();
+    }
+
+    public void loadDataFromCsv() {
+        CsvReaderService csvReaderService = CsvReaderService.getInstance();
+        try {
+            atmService.loadDataFromCsv(csvReaderService);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public void run(Scanner scanner) {
@@ -72,6 +82,7 @@ public class BankingInteractor {
                     stopRunning = true;
                     System.out.println("Thank you for your time managing PAO Bank!");
                 }
+//                TODO make everything a function and log all the events
                 case openCheckingAccountForClient -> openCheckingAccountInteractor(scanner);
                 case openSavingsAccountForClient -> openSavingsAccountInteractor(scanner);
                 case showClientAccounts -> showClientAccountsInteractor(scanner);

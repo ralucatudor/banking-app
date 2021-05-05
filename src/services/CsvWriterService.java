@@ -7,16 +7,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Singleton class for writing to a file.
+ * Singleton class for writing to a CSV file.
  */
-public class FileWriterService {
-    private static FileWriterService instance = null;
+public class CsvWriterService {
+    private static CsvWriterService instance = null;
 
-    private FileWriterService() {}
+    private CsvWriterService() {}
 
-    public static FileWriterService getInstance() {
+    public static CsvWriterService getInstance() {
         if (instance == null) {
-            instance = new FileWriterService();
+            instance = new CsvWriterService();
         }
         return instance;
     }
@@ -26,7 +26,7 @@ public class FileWriterService {
                 .collect(Collectors.joining(","));
     }
 
-    public void writeToFile(String path, List<String> data) throws IOException {
+    public void write(String path, List<String> data) throws IOException {
         File destinatie = new File(path);
         destinatie.createNewFile(); // if file already exists will do nothing
 

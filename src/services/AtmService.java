@@ -7,6 +7,7 @@ import models.atm.Deposit;
 import models.atm.Withdrawal;
 import utils.Address;
 
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 /**
  * Manages ATM services.
  */
+// TODO make this singleton?
 public class AtmService {
     private final List<Atm> atms = new ArrayList<>();
     private final List<AtmTransaction> atmTransactions = new ArrayList<>();
@@ -83,5 +85,18 @@ public class AtmService {
 
     public List<AtmTransaction> getAtmTransactions() {
         return atmTransactions;
+    }
+
+    public void loadDataFromCsv(CsvReaderService reader) throws FileNotFoundException {
+        List<List<String>> dbData = reader.read("data\\atms.csv");
+
+        for (List<String> data : dbData) {
+            Atm atm = new Atm(
+                    new Address(data.get(0), data.get(1), data.get(2), data.get(3)),
+                    new BigDecimal(data.get(4)),
+                    data.get(5)
+            );
+            atms.add(atm);
+        }
     }
 }
