@@ -1,6 +1,5 @@
 package services;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -27,13 +26,12 @@ public class CsvWriterService {
     }
 
     public void write(String path, List<String> data) throws IOException {
-        File destinatie = new File(path);
-        destinatie.createNewFile(); // if file already exists will do nothing
+        FileWriter fileWriter = new FileWriter(path, true);
 
-        FileWriter w = new FileWriter(destinatie,true);
         String toWrite = getCommaSeparatedString(data);
-        w.write(toWrite + "\n");
-        w.flush();
-        w.close();
+        fileWriter.write(toWrite + "\n");
+
+        fileWriter.flush();
+        fileWriter.close();
     }
 }
