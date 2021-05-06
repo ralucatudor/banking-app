@@ -3,6 +3,7 @@ package services;
 import utils.Address;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Scanner;
 
@@ -59,7 +60,22 @@ public class BankingInteractor {
         }
     }
 
-//    TODO add metoda apelata la exit care scrie in fisierele csv continuturile curente ale array urilor!
+    /**
+     * Method called at exit. Writes current data in CSV files to maintain persistence.
+     *
+     * Note: O alternativa era sa adaug in fisierele csv datele noi de fiecare data
+     * cand cream un nou obiect. Insa, in cazul de update al datelor, nu se pastreaza
+     * persistenta, asa ca am ales sa rescriu fisierele csv cu datele curente la final,
+     * atunci cand se da exit.
+     */
+    public void updateCsvData() {
+        CsvWriterService csvWriterService = CsvWriterService.getInstance();
+        try {
+            clientService.updateCsvData(csvWriterService);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void run(Scanner scanner) {
         boolean stopRunning = false;
@@ -80,25 +96,34 @@ public class BankingInteractor {
 
             switch (Queries.values()[queryIdx]) {
                 case registerNewClient -> registerNewClientInteract(scanner);
-                case showClients -> clientService.showClients();
-                case exit -> {
-                    stopRunning = true;
-                    System.out.println("Thank you for your time managing PAO Bank!");
+                case showClients -> {
+                    clientService.showClients();
+                    auditService.logEvent("show clients");
                 }
-//                TODO make everything a function and log all the events
                 case openCheckingAccountForClient -> openCheckingAccountInteractor(scanner);
                 case openSavingsAccountForClient -> openSavingsAccountInteractor(scanner);
                 case showClientAccounts -> showClientAccountsInteractor(scanner);
                 case createAtm -> createAtmInteract(scanner);
                 case depositToAtm -> depositToAtmInteractor(scanner);
-                case showAtms -> atmService.showAtms();
+                case showAtms -> {
+                    atmService.showAtms();
+                    auditService.logEvent("show ATMs");
+                }
                 case depositToAccount -> depositToAccountInteractor(scanner);
                 case withdrawFromAccount -> withdrawFromAccountInteractor(scanner);
                 case makeTransfer -> makeTransferInteractor(scanner);
                 case showTransfersForAccount -> showTransfersForAccountInteractor(scanner);
-                case showAllTransfers -> transferService.showTransfers();
+                case showAllTransfers -> {
+                    transferService.showTransfers();
+                    auditService.logEvent("show transfers");
+                }
                 case showLinkedCards -> showLinkedCardsInteractor(scanner);
                 case addCardToAccount -> addCardToAccountInteractor(scanner);
+                case exit -> {
+                    stopRunning = true;
+                    updateCsvData();
+                    System.out.println("Thank you for your time managing PAO Bank!");
+                }
             }
         }
     }

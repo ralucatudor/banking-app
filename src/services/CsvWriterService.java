@@ -25,8 +25,20 @@ public class CsvWriterService {
                 .collect(Collectors.joining(","));
     }
 
-    public void write(String path, List<String> data) throws IOException {
-        FileWriter fileWriter = new FileWriter(path, true);
+    public void emptyFile(String path) throws IOException {
+        new FileWriter(path, false).close();
+    }
+
+    /**
+     * Writes to a csv file.
+     *
+     * @param path csv file path.
+     * @param data data to be written on one line of the csv file.
+     * @param append boolean indicating whether or not to append
+     *               the data already written in the file.
+     */
+    public void write(String path, List<String> data, boolean append) throws IOException {
+        FileWriter fileWriter = new FileWriter(path, append);
 
         String toWrite = getCommaSeparatedString(data);
         fileWriter.write(toWrite + "\n");

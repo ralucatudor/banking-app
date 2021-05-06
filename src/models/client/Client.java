@@ -42,6 +42,26 @@ public class Client {
         this.registrationDate = registrationDate;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public LocalDate getRegistrationDate() {
+        return registrationDate;
+    }
+
     public String getEmailAddress() {
         return emailAddress;
     }

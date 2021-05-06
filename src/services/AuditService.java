@@ -31,7 +31,7 @@ public class AuditService {
         toWrite.add(eventName);
 
         try {
-            csvWriterService.write("data\\audit.csv", toWrite);
+            csvWriterService.write("data\\audit.csv", toWrite, true);
         } catch (IOException e) {
             e.printStackTrace();
         }

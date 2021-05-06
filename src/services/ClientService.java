@@ -4,6 +4,7 @@ import models.client.Client;
 import utils.Address;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +82,26 @@ public class ClientService {
                     LocalDate.parse(data.get(8))
             );
             clients.add(client);
+        }
+    }
+
+    public void updateCsvData(CsvWriterService writer) throws IOException {
+        writer.emptyFile("data\\clients.csv");
+        for (Client client : clients) {
+            List<String> data = new ArrayList<>();
+
+            data.add(client.getId().toString());
+            data.add(client.getFirstName());
+            data.add(client.getLastName());
+            data.add(client.getEmailAddress());
+            Address clientAddress = client.getAddress();
+            data.add(clientAddress.getStreetAddress());
+            data.add(clientAddress.getCity());
+            data.add(clientAddress.getCountry());
+            data.add(clientAddress.getPostalCode());
+            data.add(client.getRegistrationDate().toString());
+
+            writer.write("data\\clients.csv", data, true);
         }
     }
 }
