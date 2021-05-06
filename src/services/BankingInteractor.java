@@ -55,6 +55,7 @@ public class BankingInteractor {
         try {
             atmService.loadDataFromCsv(csvReaderService);
             clientService.loadDataFromCsv(csvReaderService);
+            accountService.loadDataFromCsv(csvReaderService);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -73,6 +74,7 @@ public class BankingInteractor {
         try {
             clientService.updateCsvData(csvWriterService);
             atmService.updateCsvData(csvWriterService);
+            accountService.updateCsvData(csvWriterService);
         } catch (IOException e) {
             e.printStackTrace();
         }

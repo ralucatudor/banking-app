@@ -2,11 +2,18 @@ package services;
 
 import models.accounts.Account;
 import models.accounts.AccountFactory;
+import models.accounts.CheckingAccount;
+import models.accounts.SavingsAccount;
 import models.card.Card;
 import models.client.Client;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Singleton class for managing banking accounts.
@@ -94,4 +101,48 @@ public class AccountService {
         account.createCard();
     }
 
+    public void loadDataFromCsv(CsvReaderService reader) throws FileNotFoundException {
+        List<List<String>> dbData = reader.read("data\\accounts.csv");
+
+        for (List<String> data : dbData) {
+            Account account;
+            if (data.get(0).equals("checking")) {
+                account = new CheckingAccount(
+                        UUID.fromString(data.get(1)),
+                        data.get(2),
+                        LocalDate.parse(data.get(3)),
+                        new BigDecimal(data.get(4))
+                );
+            } else {
+                account = new SavingsAccount(
+                        UUID.fromString(data.get(1)),
+                        data.get(2),
+                        LocalDate.parse(data.get(3)),
+                        new BigDecimal(data.get(4))
+                );
+            }
+
+            accounts.add(account);
+        }
+    }
+
+    public void updateCsvData(CsvWriterService writer) throws IOException {
+        writer.emptyFile("data\\accounts.csv");
+        for (Account account : accounts) {
+            List<String> data = new ArrayList<>();
+
+            if (account instanceof CheckingAccount) {
+                data.add("checking");
+            } else {
+                data.add("savings");
+            }
+
+            data.add(account.getClientId().toString());
+            data.add(account.getIban());
+            data.add(account.getOpenDate().toString());
+            data.add(account.getBalance().toString());
+
+            writer.write("data\\accounts.csv", data, true);
+        }
+    }
 }

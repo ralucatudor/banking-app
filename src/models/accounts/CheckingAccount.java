@@ -1,6 +1,7 @@
 package models.accounts;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 public class CheckingAccount extends Account {
@@ -10,6 +11,10 @@ public class CheckingAccount extends Account {
 
     public CheckingAccount(UUID clientId) {
         super(clientId);
+    }
+
+    public CheckingAccount(UUID clientId, String iban, LocalDate openDate, BigDecimal balance) {
+        super(clientId, iban, openDate, balance);
     }
 
     @Override

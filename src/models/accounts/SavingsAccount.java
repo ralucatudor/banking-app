@@ -1,11 +1,16 @@
 package models.accounts;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 public class SavingsAccount extends Account {
     public SavingsAccount(UUID clientId) {
         super(clientId);
+    }
+
+    public SavingsAccount(UUID clientId, String iban, LocalDate openDate, BigDecimal balance) {
+        super(clientId, iban, openDate, balance);
     }
 
     @Override

@@ -1,11 +1,10 @@
 package models.accounts;
 
 import models.card.Card;
-import models.client.Client;
 import utils.RandomGenerator;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -30,7 +29,7 @@ public abstract class Account {
     protected UUID clientId;
     // {@code iban} refers to account number.
     protected String iban;
-    protected LocalDateTime openDate;
+    protected LocalDate openDate;
     protected BigDecimal balance;
     // Note: when an account is opened, a card is linked to it by default.
     protected List<Card> cards = new ArrayList<>();
@@ -38,12 +37,28 @@ public abstract class Account {
     public Account(UUID clientId) {
         this.clientId = clientId;
         this.iban = RandomGenerator.getNumericString(AccountDetails.IBAN_SIZE.value);
-        this.openDate = LocalDateTime.now();
+        this.openDate = LocalDate.now();
         this.balance = new BigDecimal(AccountDetails.INITIAL_BALANCE.value);
+    }
+
+    public Account(UUID clientId, String iban, LocalDate openDate, BigDecimal balance) {
+        this.clientId = clientId;
+        this.iban = iban;
+        this.openDate = openDate;
+        this.balance = balance;
+        createCard();
     }
 
     public UUID getClientId() {
         return clientId;
+    }
+
+    public LocalDate getOpenDate() {
+        return openDate;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
     }
 
     public String getIban() {
