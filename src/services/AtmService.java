@@ -8,6 +8,7 @@ import models.atm.Withdrawal;
 import utils.Address;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,6 +98,25 @@ public class AtmService {
                     data.get(5)
             );
             atms.add(atm);
+        }
+    }
+
+    public void updateCsvData(CsvWriterService writer) throws IOException {
+        writer.emptyFile("data\\atms.csv");
+        for (Atm atm : atms) {
+            List<String> data = new ArrayList<>();
+
+            Address atmAddress = atm.getAddress();
+            data.add(atmAddress.getStreetAddress());
+            data.add(atmAddress.getCity());
+            data.add(atmAddress.getCountry());
+            data.add(atmAddress.getPostalCode());
+
+            data.add(atm.getFunds().toString());
+
+            data.add(atm.getIdentifier());
+
+            writer.write("data\\atms.csv", data, true);
         }
     }
 }

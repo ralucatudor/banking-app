@@ -72,6 +72,7 @@ public class BankingInteractor {
         CsvWriterService csvWriterService = CsvWriterService.getInstance();
         try {
             clientService.updateCsvData(csvWriterService);
+            atmService.updateCsvData(csvWriterService);
         } catch (IOException e) {
             e.printStackTrace();
         }

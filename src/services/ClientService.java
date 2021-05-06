@@ -94,11 +94,13 @@ public class ClientService {
             data.add(client.getFirstName());
             data.add(client.getLastName());
             data.add(client.getEmailAddress());
+
             Address clientAddress = client.getAddress();
             data.add(clientAddress.getStreetAddress());
             data.add(clientAddress.getCity());
             data.add(clientAddress.getCountry());
             data.add(clientAddress.getPostalCode());
+
             data.add(client.getRegistrationDate().toString());
 
             writer.write("data\\clients.csv", data, true);

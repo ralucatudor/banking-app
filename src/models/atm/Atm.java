@@ -18,6 +18,8 @@ public class Atm {
         this.identifier = identifier;
     }
 
+    public Address getAddress() { return address; }
+
     public BigDecimal getFunds() {
         return funds;
     }
