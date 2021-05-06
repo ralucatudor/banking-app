@@ -3,8 +3,11 @@ package services;
 import models.client.Client;
 import utils.Address;
 
+import java.io.FileNotFoundException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Singleton class for managing bank clients.
@@ -63,5 +66,21 @@ public class ClientService {
     public void showClientAccounts(String clientEmailAddress) throws Exception {
         Client client = this.getClientByEmailAddress(clientEmailAddress);
         accountService.showClientAccounts(client);
+    }
+
+    public void loadDataFromCsv(CsvReaderService reader) throws FileNotFoundException {
+        List<List<String>> dbData = reader.read("data\\clients.csv");
+
+        for (List<String> data : dbData) {
+            Client client = new Client(
+                    UUID.fromString(data.get(0)),
+                    data.get(1),
+                    data.get(2),
+                    data.get(3),
+                    new Address(data.get(4), data.get(5), data.get(6), data.get(7)),
+                    LocalDate.parse(data.get(8))
+            );
+            clients.add(client);
+        }
     }
 }

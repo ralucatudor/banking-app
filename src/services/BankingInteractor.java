@@ -53,10 +53,13 @@ public class BankingInteractor {
         CsvReaderService csvReaderService = CsvReaderService.getInstance();
         try {
             atmService.loadDataFromCsv(csvReaderService);
+            clientService.loadDataFromCsv(csvReaderService);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
+
+//    TODO add metoda apelata la exit care scrie in fisierele csv continuturile curente ale array urilor!
 
     public void run(Scanner scanner) {
         boolean stopRunning = false;
