@@ -11,10 +11,10 @@ public class AccountFactory {
             return null;
         }
         if (accountType.equalsIgnoreCase("checking")) {
-            return new CheckingAccount(client);
+            return new CheckingAccount(client.getId());
         }
         if (accountType.equalsIgnoreCase("savings")) {
-            return new SavingsAccount(client);
+            return new SavingsAccount(client.getId());
         }
         return null;
     }

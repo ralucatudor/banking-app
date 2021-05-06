@@ -1,12 +1,11 @@
 package models.accounts;
 
-import models.client.Client;
-
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class SavingsAccount extends Account {
-    public SavingsAccount(Client client) {
-        super(client);
+    public SavingsAccount(UUID clientId) {
+        super(clientId);
     }
 
     @Override
@@ -37,7 +36,7 @@ public class SavingsAccount extends Account {
     @Override
     public String toString() {
         return "SavingsAccount{" +
-                "client=" + client +
+                "clientId=" + clientId +
                 ", iban='" + iban + '\'' +
                 ", openDate=" + openDate +
                 ", balance=" + balance +

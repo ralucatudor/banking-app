@@ -1,16 +1,15 @@
 package models.accounts;
 
-import models.client.Client;
-
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class CheckingAccount extends Account {
     private static final BigDecimal DEPOSIT_FEE = BigDecimal.ONE;
     private static final BigDecimal WITHDRAWAL_FEE_PERCENT = new BigDecimal("0.03");
     private static final BigDecimal TRANSFER_FEE = BigDecimal.ZERO;
 
-    public CheckingAccount(Client client) {
-        super(client);
+    public CheckingAccount(UUID clientId) {
+        super(clientId);
     }
 
     @Override
@@ -45,7 +44,7 @@ public class CheckingAccount extends Account {
     @Override
     public String toString() {
         return "CheckingAccount{" +
-                "client=" + client +
+                "clientId=" + clientId +
                 ", iban='" + iban + '\'' +
                 ", openDate=" + openDate +
                 ", balance=" + balance +

@@ -60,7 +60,7 @@ public class AccountService {
 
     public void showClientAccounts(Client client) {
         for (Account account : accounts) {
-            if (account.getClient().equals(client)) {
+            if (account.getClientId().equals(client.getId())) {
                 System.out.println(account);
             }
         }

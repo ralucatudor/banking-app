@@ -16,7 +16,6 @@ import java.util.List;
 /**
  * Manages ATM services.
  */
-// TODO make this singleton?
 public class AtmService {
     private final List<Atm> atms = new ArrayList<>();
     private final List<AtmTransaction> atmTransactions = new ArrayList<>();

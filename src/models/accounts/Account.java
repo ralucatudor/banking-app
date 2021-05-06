@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Holds information about a bank account, such as the account holder,
@@ -25,8 +26,8 @@ public abstract class Account {
         }
     }
 
-    // {@code client} refers to the account holder.
-    protected Client client;
+    // {@code clientId} refers to the account holder.
+    protected UUID clientId;
     // {@code iban} refers to account number.
     protected String iban;
     protected LocalDateTime openDate;
@@ -34,15 +35,15 @@ public abstract class Account {
     // Note: when an account is opened, a card is linked to it by default.
     protected List<Card> cards = new ArrayList<>();
 
-    public Account(Client client) {
-        this.client = client;
+    public Account(UUID clientId) {
+        this.clientId = clientId;
         this.iban = RandomGenerator.getNumericString(AccountDetails.IBAN_SIZE.value);
         this.openDate = LocalDateTime.now();
         this.balance = new BigDecimal(AccountDetails.INITIAL_BALANCE.value);
     }
 
-    public Client getClient() {
-        return client;
+    public UUID getClientId() {
+        return clientId;
     }
 
     public String getIban() {
@@ -100,7 +101,7 @@ public abstract class Account {
     @Override
     public String toString() {
         return "Account{" +
-                "client=" + client +
+                "clientId=" + clientId +
                 ", iban='" + iban + '\'' +
                 ", openDate=" + openDate +
                 ", balance=" + balance +
