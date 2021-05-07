@@ -3,49 +3,61 @@ package models.transfer;
 import models.accounts.Account;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 /**
  * Represents a transaction that holds place between two accounts -
  * when money is sent from one bank account to another.
  */
-public class Transfer implements Comparable<Transfer> {
-    private final LocalDateTime date;
+public class Transfer {
+    private final LocalDate date;
     private final BigDecimal amount;
     private final String description;
-    private final Account sourceAccount;
-    private final Account destinationAccount;
+    private final String sourceIban;
+    private final String destinationIban;
 
     public Transfer(BigDecimal amount,
                     String description,
                     Account sourceAccount,
-                    Account destinationAccount) {
-        this.date = LocalDateTime.now();
+                    Account destinationAccount) throws Exception {
+        this.date = LocalDate.now();
         this.amount = amount;
         this.description = description;
-        this.sourceAccount = sourceAccount;
-        this.destinationAccount = destinationAccount;
-    }
+        this.sourceIban = sourceAccount.getIban();
+        this.destinationIban = destinationAccount.getIban();
 
-    public Account getSourceAccount() {
-        return sourceAccount;
-    }
-
-    public Account getDestinationAccount() {
-        return destinationAccount;
-    }
-
-    /**
-     * Moves funds from one account to another.
-     */
-    public void execute() throws Exception {
+        // Execute transaction.
+        // Move funds from one account to another.
         sourceAccount.deductFunds(amount.add(sourceAccount.getTransferFee(amount)));
         destinationAccount.addFunds(amount);
     }
 
-    @Override
-    public int compareTo(Transfer o) {
-        return date.compareTo(o.date);
+    public Transfer(LocalDate date, BigDecimal amount, String description, String sourceIban, String destinationIban) {
+        this.date = date;
+        this.amount = amount;
+        this.description = description;
+        this.sourceIban = sourceIban;
+        this.destinationIban = destinationIban;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getSourceIban() {
+        return sourceIban;
+    }
+
+    public String getDestinationIban() {
+        return destinationIban;
     }
 
     @Override
@@ -54,8 +66,8 @@ public class Transfer implements Comparable<Transfer> {
                 "date=" + date +
                 ", amount=" + amount +
                 ", description='" + description + '\'' +
-                ", sourceAccount=" + sourceAccount +
-                ", destinationAccount=" + destinationAccount +
+                ", sourceIban='" + sourceIban + '\'' +
+                ", destinationIban='" + destinationIban + '\'' +
                 '}';
     }
 }

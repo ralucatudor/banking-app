@@ -2,9 +2,15 @@ package services;
 
 import models.accounts.Account;
 import models.transfer.Transfer;
+import models.transfer.TransferComparator;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
@@ -13,7 +19,7 @@ import java.util.stream.Collectors;
  */
 public class TransferService {
     private static TransferService instance = null;
-    private final TreeSet<Transfer> transfers = new TreeSet<>();
+    private final SortedSet<Transfer> transfers = new TreeSet<>(new TransferComparator());
     private final AccountService accountService;
 
     private TransferService() {
@@ -39,16 +45,13 @@ public class TransferService {
         }
 
         Transfer transfer = new Transfer(amount, description, sourceAccount, destinationAccount);
-        transfer.execute();
         transfers.add(transfer);
     }
 
-    public List<Transfer> getTransfersForAccount(String iban) throws Exception {
-        Account account = this.accountService.getAccountByIban(iban);
-
+    public List<Transfer> getTransfersForAccount(String iban) {
         return transfers.stream().filter(
-                t -> t.getSourceAccount().equals(account) ||
-                        t.getDestinationAccount().equals(account)
+                t -> t.getSourceIban().equals(iban) ||
+                        t.getDestinationIban().equals(iban)
         ).collect(Collectors.toList());
     }
 
@@ -59,10 +62,41 @@ public class TransferService {
         }
     }
 
-    public void showTransfersForAccount(String iban) throws Exception {
+    public void showTransfersForAccount(String iban) {
         List<Transfer> accountTransfers = getTransfersForAccount(iban);
         for (Transfer transfer : accountTransfers) {
             System.out.println(transfer);
+        }
+    }
+
+    public void loadDataFromCsv(CsvReaderService reader) throws FileNotFoundException {
+        List<List<String>> dbData = reader.read("data\\transfers.csv");
+
+        for (List<String> data : dbData) {
+            Transfer transfer = new Transfer(
+                    LocalDate.parse(data.get(0)),
+                    new BigDecimal(data.get(1)),
+                    data.get(2),
+                    data.get(3),
+                    data.get(4)
+                );
+
+            transfers.add(transfer);
+        }
+    }
+
+    public void updateCsvData(CsvWriterService writer) throws IOException {
+        writer.emptyFile("data\\transfers.csv");
+        for (Transfer transfer : transfers) {
+            List<String> data = new ArrayList<>();
+
+            data.add(transfer.getDate().toString());
+            data.add(transfer.getAmount().toString());
+            data.add(transfer.getDescription());
+            data.add(transfer.getSourceIban());
+            data.add(transfer.getDestinationIban());
+
+            writer.write("data\\transfers.csv", data, true);
         }
     }
 }
