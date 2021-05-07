@@ -11,6 +11,7 @@ Note that this app is designed to be used for managing the services of an imagin
 
 ## Project Timeline
 ### 1st Phase
+Done
 
 #### Requirements
 System with
@@ -23,6 +24,12 @@ To implement:
 - [x] use inheritance.
 - [x] at least 1 service class exposing the actions.
 - [x] 1 Main class - making calls to the services.
+
+### 2nd Phase
+Done
+
+### 3rd Phase
+TODO
 
 ## Structure
 - package accounts
@@ -61,10 +68,6 @@ Thoughts:
 
 Later on:
 - JUnit testing - mocking / test doubles
-- add GUI?
-- use UUID?
-- Logging class?
-- Better handle exceptions?
 
 Notes
 - Date is obsolete. LocalDateTime/ LocalDateTime has been used. See [useful article](https://stackabuse.com/how-to-get-current-date-and-time-in-java/)

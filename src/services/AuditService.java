@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class AuditService {
     private static AuditService instance = null;
-    private CsvWriterService csvWriterService;
+    private final CsvWriterService csvWriterService;
 
     private AuditService() { this.csvWriterService = CsvWriterService.getInstance(); }
 
