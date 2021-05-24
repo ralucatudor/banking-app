@@ -62,6 +62,11 @@ public class BankingInteractor {
         }
     }
 
+    public void testDatabase() {
+        DatabaseService databaseService = DatabaseService.getInstance();
+        databaseService.test();
+    }
+
     /**
      * Method called at exit. Writes current data in CSV files to maintain persistence.
      *

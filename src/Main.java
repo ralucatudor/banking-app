@@ -8,6 +8,8 @@ public class Main {
 
         BankingInteractor bankingInteractor = new BankingInteractor();
         bankingInteractor.loadDataFromCsv();
+        bankingInteractor.testDatabase();
+
         bankingInteractor.run(scanner);
 
         scanner.close();
