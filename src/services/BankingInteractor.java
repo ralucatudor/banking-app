@@ -16,6 +16,7 @@ public class BankingInteractor {
     private final AccountService accountService;
     private final TransferService transferService;
     private final AuditService auditService;
+    private final DatabaseService databaseService;
 
     // Possible actions, held in an enum for cleaner code.
     enum Queries {
@@ -47,6 +48,7 @@ public class BankingInteractor {
         this.accountService = AccountService.getInstance();
         this.transferService = TransferService.getInstance();
         this.auditService = AuditService.getInstance();
+        this.databaseService = DatabaseService.getInstance();
         this.atmService = new AtmService();
     }
 
@@ -60,11 +62,6 @@ public class BankingInteractor {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    public void testDatabase() {
-        DatabaseService databaseService = DatabaseService.getInstance();
-        databaseService.test();
     }
 
     /**
@@ -131,7 +128,8 @@ public class BankingInteractor {
                 case addCardToAccount -> addCardToAccountInteractor(scanner);
                 case exit -> {
                     stopRunning = true;
-                    updateCsvData();
+                    // For Phase II:
+                    // updateCsvData();
                     System.out.println("Thank you for your time managing PAO Bank!");
                 }
             }
@@ -154,7 +152,9 @@ public class BankingInteractor {
 
         Address address = readAddress(scanner);
 
-        clientService.registerNewClient(firstName,
+        clientService.registerNewClient(
+                databaseService,
+                firstName,
                 lastName,
                 emailAddress,
                 address);

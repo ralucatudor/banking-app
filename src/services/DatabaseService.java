@@ -1,14 +1,18 @@
 package services;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.time.LocalDate;
 
 /**
  * Singleton class for handling database operations.
  */
 public class DatabaseService {
+    // "jdbc:mysql://127.0.0.1:3306/bankpao"
+    // URL-ul este format din protocol + vendor + adresa
+    private static String URL = "jdbc:mysql://localhost:3306/bankpao";
+    private static String user = "root";
+    private static String password = "";
+
     private static DatabaseService instance = null;
 
     private DatabaseService() {}
@@ -20,21 +24,35 @@ public class DatabaseService {
         return instance;
     }
 
-    public void test() {
-        // String URL = "jdbc:mysql://127.0.0.1:3306/bankpao";
-        String URL = "jdbc:mysql://localhost:3306/bankpao";
-        // URL-ul este format din protocol + vendor + adresa
-        String user = "root";
-        String password = "";
+    public void insertClient(String firstName,
+                             String lastName,
+                             String emailAddress,
+                             String streetAddress,
+                             String city,
+                             String country,
+                             String postalCode,
+                             LocalDate registrationDate) {
+        try (Connection connection = DriverManager.getConnection(URL, user, password)) {
 
-        try (Connection connection = DriverManager.getConnection(URL, user, password);
-             Statement statement = connection.createStatement()) {
+            String query = "INSERT INTO client VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
 
-            String query = "insert into client values (null, 'Tom', 'Tomescu', 'tomescu@pao.ro', 'Str. FMI nr. 10', 'Bucharest', 'Romania', '010101', '2021-04-10')";
-            statement.executeUpdate(query);
+            preparedStatement.setString(1, firstName);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setString(3, emailAddress);
+            preparedStatement.setString(4, streetAddress);
+            preparedStatement.setString(5, city);
+            preparedStatement.setString(6, country);
+            preparedStatement.setString(7, postalCode);
+            preparedStatement.setDate(8, Date.valueOf(registrationDate));
+
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
     }
 }

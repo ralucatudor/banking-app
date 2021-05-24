@@ -29,12 +29,24 @@ public class ClientService {
         return instance;
     }
 
-    public void registerNewClient(String firstName,
+    public void registerNewClient(DatabaseService databaseService,
+                                  String firstName,
                                   String lastName,
                                   String emailAddress,
                                   Address address) {
         Client client = new Client(firstName, lastName, emailAddress, address);
         clients.add(client);
+
+        databaseService.insertClient(
+                firstName,
+                lastName,
+                emailAddress,
+                address.getStreetAddress(),
+                address.getCity(),
+                address.getCountry(),
+                address.getPostalCode(),
+                client.getRegistrationDate()
+        );
     }
 
     public void showClients() {

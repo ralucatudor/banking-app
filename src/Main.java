@@ -7,8 +7,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         BankingInteractor bankingInteractor = new BankingInteractor();
-        bankingInteractor.loadDataFromCsv();
-        bankingInteractor.testDatabase();
+        // bankingInteractor.loadDataFromCsv();
 
         bankingInteractor.run(scanner);
 
