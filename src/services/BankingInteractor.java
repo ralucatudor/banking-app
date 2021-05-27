@@ -35,6 +35,7 @@ public class BankingInteractor {
         showAllTransfers("Show all transfers."),
         showLinkedCards("Show cards linked to an account."),
         addCardToAccount("Add another card to an account."),
+        deleteAtm("Delete an ATM."),
         exit("Exit");
 
         public final String query;
@@ -67,6 +68,7 @@ public class BankingInteractor {
     public void loadDataFromDatabase() {
         clientService.loadDataFromStringList(databaseService.loadClientData());
         atmService.loadDataFromStringList(databaseService.loadAtmData());
+        transferService.loadDataFromStringList(databaseService.loadTransferData());
     }
 
     /**
@@ -131,6 +133,7 @@ public class BankingInteractor {
                 }
                 case showLinkedCards -> showLinkedCardsInteractor(scanner);
                 case addCardToAccount -> addCardToAccountInteractor(scanner);
+                case deleteAtm -> deleteAtmInteractor(scanner);
                 case exit -> {
                     stopRunning = true;
                     // For Phase II:
@@ -258,7 +261,7 @@ public class BankingInteractor {
         BigDecimal amount = new BigDecimal(scanner.next());
 
         try {
-            atmService.depositToAtm(identifier, amount);
+            atmService.depositToAtm(databaseService, identifier, amount);
             auditService.logEvent("deposit to atm");
         } catch (Exception e) {
             e.printStackTrace();
@@ -280,7 +283,7 @@ public class BankingInteractor {
         BigDecimal amount = new BigDecimal(scanner.next());
 
         try {
-            atmService.depositToAccount(atmIdentifier, cardNumber, amount);
+            atmService.depositToAccount(databaseService, atmIdentifier, cardNumber, amount);
             auditService.logEvent("deposit to account using atm");
             System.out.println("Successfully added funds to the linked account!");
         } catch (Exception e) {
@@ -301,7 +304,7 @@ public class BankingInteractor {
         BigDecimal amount = new BigDecimal(scanner.next());
 
         try {
-            atmService.withdrawFromAccount(atmIdentifier, cardNumber, amount);
+            atmService.withdrawFromAccount(databaseService, atmIdentifier, cardNumber, amount);
             auditService.logEvent("withdraw from account using atm");
             System.out.println("Successfully withdrawn funds from the linked account!");
         } catch (Exception e) {
@@ -373,5 +376,16 @@ public class BankingInteractor {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void deleteAtmInteractor(Scanner scanner) {
+        System.out.println("Please enter");
+
+        System.out.println("ATM Identifier:");
+        String atmIdentifier = scanner.next();
+
+        atmService.deleteAtm(databaseService, atmIdentifier);
+        auditService.logEvent("delete ATM");
+        System.out.println("Successfully deleted ATM!");
     }
 }

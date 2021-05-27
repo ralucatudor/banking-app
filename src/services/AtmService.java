@@ -49,19 +49,18 @@ public class AtmService {
         throw new Exception("ATM identifier " + identifier + " is invalid.");
     }
 
-    public void depositToAtm(String atmIdentifier,
+    public void depositToAtm(DatabaseService databaseService,
+                             String atmIdentifier,
                              BigDecimal amount) throws Exception {
         Atm atm = this.getAtm(atmIdentifier);
         atm.addFunds(amount);
+
+        // Update to database.
+        databaseService.updateAtmFunds(atm.getIdentifier(), atm.getFunds());
     }
 
-    public void withdrawFromAtm(String atmIdentifier,
-                                BigDecimal amount) throws Exception {
-        Atm atm = this.getAtm(atmIdentifier);
-        atm.deductFunds(amount);
-    }
-
-    public void depositToAccount(String atmIdentifier,
+    public void depositToAccount(DatabaseService databaseService,
+                                 String atmIdentifier,
                                  String cardNumber,
                                  BigDecimal amount) throws Exception {
         Atm atm = this.getAtm(atmIdentifier);
@@ -70,9 +69,13 @@ public class AtmService {
         AtmTransaction atmTransaction = new Deposit(amount, account, atm);
         atmTransaction.execute();
         atmTransactions.add(atmTransaction);
+
+        // Update to database.
+        databaseService.updateAtmFunds(atm.getIdentifier(), atm.getFunds());
     }
 
-    public void withdrawFromAccount(String atmIdentifier,
+    public void withdrawFromAccount(DatabaseService databaseService,
+                                    String atmIdentifier,
                                     String cardNumber,
                                     BigDecimal amount) throws Exception {
         Atm atm = this.getAtm(atmIdentifier);
@@ -81,6 +84,17 @@ public class AtmService {
         AtmTransaction atmTransaction = new Withdrawal(amount, account, atm);
         atmTransaction.execute();
         atmTransactions.add(atmTransaction);
+
+        // Update to database.
+        databaseService.updateAtmFunds(atm.getIdentifier(), atm.getFunds());
+    }
+
+    public void deleteAtm(DatabaseService databaseService,
+                          String atmIdentifier) {
+        atms.removeIf(atm -> atm.getIdentifier().equals(atmIdentifier));
+
+        // Also delete from the database.
+        databaseService.deleteAtm(atmIdentifier);
     }
 
     public List<AtmTransaction> getAtmTransactions() {

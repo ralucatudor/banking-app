@@ -95,6 +95,36 @@ public class DatabaseService {
     }
 
     /**
+     * READ transfer
+     */
+    public List<List<String>> loadTransferData() {
+        try (Connection connection = DriverManager.getConnection(URL, user, password)) {
+            ResultSet dbResult = getTransfers(connection);
+            List<List<String>> data = new ArrayList<>();
+
+            while (dbResult.next()) {
+                List<String> transfers = Arrays.asList(
+                        dbResult.getString("date"),
+                        dbResult.getString("amount"),
+                        dbResult.getString("description"),
+                        dbResult.getString("sourceIban"),
+                        dbResult.getString("destinationIban")
+                );
+                data.add(transfers);
+            }
+            return data;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    public static ResultSet getTransfers(Connection connection) throws SQLException {
+        String query = "SELECT * FROM transfer";
+        return connection.prepareStatement(query).executeQuery();
+    }
+
+    /**
      * CREATE client
      */
     public void insertClient(UUID id,
@@ -155,6 +185,73 @@ public class DatabaseService {
 
             preparedStatement.close();
 
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    /**
+     * CREATE transfer
+     */
+    public void insertTransfer(LocalDate date,
+                               BigDecimal amount,
+                               String description,
+                               String sourceIban,
+                               String destinationIban) {
+        try (Connection connection = DriverManager.getConnection(URL, user, password)) {
+
+            String query = "INSERT INTO atm VALUES (NULL, ?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setDate(1, Date.valueOf(date));
+            preparedStatement.setBigDecimal(2, amount);
+            preparedStatement.setString(3, description);
+            preparedStatement.setString(4, sourceIban);
+            preparedStatement.setString(5, destinationIban);
+
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    /**
+     * UPDATE atm (funds)
+     */
+    public void updateAtmFunds(String atmIdentifier, BigDecimal newFunds) {
+        try (Connection connection = DriverManager.getConnection(URL, user, password)) {
+
+            String query = "UPDATE atm SET funds = ? WHERE identifier = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setBigDecimal(1, newFunds);
+            preparedStatement.setString(2, atmIdentifier);
+
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    /**
+     * DELETE atm
+     */
+    public void deleteAtm(String atmIdentifier) {
+        try (Connection connection = DriverManager.getConnection(URL, user, password)) {
+
+            String query = "DELETE FROM atm WHERE identifier = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setString(1, atmIdentifier);
+
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

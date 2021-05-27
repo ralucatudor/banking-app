@@ -8,10 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -69,9 +66,7 @@ public class TransferService {
         }
     }
 
-    public void loadDataFromCsv(CsvReaderService reader) throws FileNotFoundException {
-        List<List<String>> dbData = reader.read("data\\transfers.csv");
-
+    public void loadDataFromStringList(List<List<String>> dbData) {
         for (List<String> data : dbData) {
             Transfer transfer = new Transfer(
                     LocalDate.parse(data.get(0)),
@@ -79,10 +74,16 @@ public class TransferService {
                     data.get(2),
                     data.get(3),
                     data.get(4)
-                );
+            );
 
             transfers.add(transfer);
         }
+    }
+
+    public void loadDataFromCsv(CsvReaderService reader) throws FileNotFoundException {
+        List<List<String>> dbData = reader.read("data\\transfers.csv");
+
+        this.loadDataFromStringList(dbData);
     }
 
     public void updateCsvData(CsvWriterService writer) throws IOException {
