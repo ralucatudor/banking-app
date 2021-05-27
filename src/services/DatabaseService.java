@@ -1,5 +1,6 @@
 package services;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class DatabaseService {
     }
 
     /**
-     * READ
+     * READ Client
      */
     public List<List<String>> loadClientData() {
         try (Connection connection = DriverManager.getConnection(URL, user, password)) {
@@ -49,17 +50,6 @@ public class DatabaseService {
                         dbResult.getString("registrationDate")
                 );
                 data.add(clients);
-//                System.out.println(
-//                        dbResult.getString("id") + " " +
-//                        dbResult.getString("firstName") + " " +
-//                        dbResult.getString("lastName") + " " +
-//                        dbResult.getString("emailAddress") + " " +
-//                        dbResult.getString("streetAddress") + " " +
-//                        dbResult.getString("city") + " " +
-//                        dbResult.getString("country") + " " +
-//                        dbResult.getString("postalCode") + " " +
-//                        dbResult.getString("registrationDate")
-//                );
             }
             return data;
         } catch (SQLException throwables) {
@@ -70,6 +60,37 @@ public class DatabaseService {
 
     public static ResultSet getClients(Connection connection) throws SQLException {
         String query = "SELECT * FROM client";
+        return connection.prepareStatement(query).executeQuery();
+    }
+
+    /**
+     * READ Atm
+     */
+    public List<List<String>> loadAtmData() {
+        try (Connection connection = DriverManager.getConnection(URL, user, password)) {
+            ResultSet dbResult = getAtms(connection);
+            List<List<String>> data = new ArrayList<>();
+
+            while (dbResult.next()) {
+                List<String> atms = Arrays.asList(
+                        dbResult.getString("streetAddress"),
+                        dbResult.getString("city"),
+                        dbResult.getString("country"),
+                        dbResult.getString("postalCode"),
+                        dbResult.getString("funds"),
+                        dbResult.getString("identifier")
+                );
+                data.add(atms);
+            }
+            return data;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    public static ResultSet getAtms(Connection connection) throws SQLException {
+        String query = "SELECT * FROM atm";
         return connection.prepareStatement(query).executeQuery();
     }
 
@@ -99,6 +120,36 @@ public class DatabaseService {
             preparedStatement.setString(7, country);
             preparedStatement.setString(8, postalCode);
             preparedStatement.setDate(9, Date.valueOf(registrationDate));
+
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    /**
+     * CREATE atm
+     */
+    public void insertAtm(String identifier,
+                          String streetAddress,
+                          String city,
+                          String country,
+                          String postalCode,
+                          BigDecimal funds) {
+        try (Connection connection = DriverManager.getConnection(URL, user, password)) {
+
+            String query = "INSERT INTO atm VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setString(1, identifier);
+            preparedStatement.setString(2, streetAddress);
+            preparedStatement.setString(3, city);
+            preparedStatement.setString(4, country);
+            preparedStatement.setString(5, postalCode);
+            preparedStatement.setBigDecimal(6, funds);
 
             preparedStatement.executeUpdate();
 
