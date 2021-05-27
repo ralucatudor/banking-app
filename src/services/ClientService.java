@@ -38,6 +38,7 @@ public class ClientService {
         clients.add(client);
 
         databaseService.insertClient(
+                client.getId(),
                 firstName,
                 lastName,
                 emailAddress,
@@ -81,9 +82,7 @@ public class ClientService {
         accountService.showClientAccounts(client);
     }
 
-    public void loadDataFromCsv(CsvReaderService reader) throws FileNotFoundException {
-        List<List<String>> dbData = reader.read("data\\clients.csv");
-
+    public void loadDataFromStringList(List<List<String>> dbData) {
         for (List<String> data : dbData) {
             Client client = new Client(
                     UUID.fromString(data.get(0)),
@@ -95,6 +94,12 @@ public class ClientService {
             );
             clients.add(client);
         }
+    }
+
+    public void loadDataFromCsv(CsvReaderService reader) throws FileNotFoundException {
+        List<List<String>> dbData = reader.read("data\\clients.csv");
+
+        loadDataFromStringList(dbData);
     }
 
     public void updateCsvData(CsvWriterService writer) throws IOException {

@@ -2,6 +2,10 @@ package services;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Singleton class for handling database operations.
@@ -24,7 +28,56 @@ public class DatabaseService {
         return instance;
     }
 
-    public void insertClient(String firstName,
+    /**
+     * READ
+     */
+    public List<List<String>> loadClientData() {
+        try (Connection connection = DriverManager.getConnection(URL, user, password)) {
+            ResultSet dbResult = getClients(connection);
+            List<List<String>> data = new ArrayList<>();
+
+            while (dbResult.next()) {
+                List<String> clients = Arrays.asList(
+                        dbResult.getString("id"),
+                        dbResult.getString("firstName"),
+                        dbResult.getString("lastName"),
+                        dbResult.getString("emailAddress"),
+                        dbResult.getString("streetAddress"),
+                        dbResult.getString("city"),
+                        dbResult.getString("country"),
+                        dbResult.getString("postalCode"),
+                        dbResult.getString("registrationDate")
+                );
+                data.add(clients);
+//                System.out.println(
+//                        dbResult.getString("id") + " " +
+//                        dbResult.getString("firstName") + " " +
+//                        dbResult.getString("lastName") + " " +
+//                        dbResult.getString("emailAddress") + " " +
+//                        dbResult.getString("streetAddress") + " " +
+//                        dbResult.getString("city") + " " +
+//                        dbResult.getString("country") + " " +
+//                        dbResult.getString("postalCode") + " " +
+//                        dbResult.getString("registrationDate")
+//                );
+            }
+            return data;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    public static ResultSet getClients(Connection connection) throws SQLException {
+        String query = "SELECT * FROM client";
+        return connection.prepareStatement(query).executeQuery();
+    }
+
+    /**
+     * CREATE client
+     */
+    public void insertClient(UUID id,
+                             String firstName,
                              String lastName,
                              String emailAddress,
                              String streetAddress,
@@ -34,17 +87,18 @@ public class DatabaseService {
                              LocalDate registrationDate) {
         try (Connection connection = DriverManager.getConnection(URL, user, password)) {
 
-            String query = "INSERT INTO client VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO client VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
-            preparedStatement.setString(1, firstName);
-            preparedStatement.setString(2, lastName);
-            preparedStatement.setString(3, emailAddress);
-            preparedStatement.setString(4, streetAddress);
-            preparedStatement.setString(5, city);
-            preparedStatement.setString(6, country);
-            preparedStatement.setString(7, postalCode);
-            preparedStatement.setDate(8, Date.valueOf(registrationDate));
+            preparedStatement.setString(1, id.toString());
+            preparedStatement.setString(2, firstName);
+            preparedStatement.setString(3, lastName);
+            preparedStatement.setString(4, emailAddress);
+            preparedStatement.setString(5, streetAddress);
+            preparedStatement.setString(6, city);
+            preparedStatement.setString(7, country);
+            preparedStatement.setString(8, postalCode);
+            preparedStatement.setDate(9, Date.valueOf(registrationDate));
 
             preparedStatement.executeUpdate();
 
@@ -53,6 +107,5 @@ public class DatabaseService {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
     }
 }

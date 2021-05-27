@@ -64,6 +64,10 @@ public class BankingInteractor {
         }
     }
 
+    public void loadDataFromDatabase() {
+        clientService.loadDataFromStringList(databaseService.loadClientData());
+    }
+
     /**
      * Method called at exit. Writes current data in CSV files to maintain persistence.
      *
