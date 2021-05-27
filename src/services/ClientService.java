@@ -99,7 +99,7 @@ public class ClientService {
     public void loadDataFromCsv(CsvReaderService reader) throws FileNotFoundException {
         List<List<String>> dbData = reader.read("data\\clients.csv");
 
-        loadDataFromStringList(dbData);
+        this.loadDataFromStringList(dbData);
     }
 
     public void updateCsvData(CsvWriterService writer) throws IOException {

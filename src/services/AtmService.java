@@ -87,9 +87,7 @@ public class AtmService {
         return atmTransactions;
     }
 
-    public void loadDataFromCsv(CsvReaderService reader) throws FileNotFoundException {
-        List<List<String>> dbData = reader.read("data\\atms.csv");
-
+    public void loadDataFromStringList(List<List<String>> dbData) {
         for (List<String> data : dbData) {
             Atm atm = new Atm(
                     new Address(data.get(0), data.get(1), data.get(2), data.get(3)),
@@ -98,6 +96,12 @@ public class AtmService {
             );
             atms.add(atm);
         }
+    }
+
+    public void loadDataFromCsv(CsvReaderService reader) throws FileNotFoundException {
+        List<List<String>> dbData = reader.read("data\\atms.csv");
+
+        this.loadDataFromStringList(dbData);
     }
 
     public void updateCsvData(CsvWriterService writer) throws IOException {

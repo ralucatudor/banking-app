@@ -66,6 +66,7 @@ public class BankingInteractor {
 
     public void loadDataFromDatabase() {
         clientService.loadDataFromStringList(databaseService.loadClientData());
+        atmService.loadDataFromStringList(databaseService.loadAtmData());
     }
 
     /**
@@ -235,6 +236,14 @@ public class BankingInteractor {
         Address address = readAddress(scanner);
 
         atmService.createAtm(address, funds, identifier);
+        databaseService.insertAtm(
+                identifier,
+                address.getStreetAddress(),
+                address.getCity(),
+                address.getCountry(),
+                address.getPostalCode(),
+                funds
+        );
         auditService.logEvent("create atm");
         System.out.println("Successfully created ATM!");
     }
