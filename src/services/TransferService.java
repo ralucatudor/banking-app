@@ -33,7 +33,8 @@ public class TransferService {
     public void makeTransfer(String sourceIban,
                              String destinationIban,
                              BigDecimal amount,
-                             String description) throws Exception {
+                             String description,
+                             DatabaseService databaseService) throws Exception {
         Account sourceAccount = this.accountService.getAccountByIban(sourceIban);
         Account destinationAccount = this.accountService.getAccountByIban(destinationIban);
 
@@ -43,6 +44,10 @@ public class TransferService {
 
         Transfer transfer = new Transfer(amount, description, sourceAccount, destinationAccount);
         transfers.add(transfer);
+
+        databaseService.insertTransfer(transfer.getDate(), amount, description, sourceIban, destinationIban);
+        databaseService.updateAccountBalance(sourceAccount.getId(), sourceAccount.getBalance());
+        databaseService.updateAccountBalance(destinationAccount.getId(), destinationAccount.getBalance());
     }
 
     public List<Transfer> getTransfersForAccount(String iban) {

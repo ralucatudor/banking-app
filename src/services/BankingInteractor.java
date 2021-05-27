@@ -68,6 +68,7 @@ public class BankingInteractor {
     public void loadDataFromDatabase() {
         clientService.loadDataFromStringList(databaseService.loadClientData());
         atmService.loadDataFromStringList(databaseService.loadAtmData());
+        accountService.loadDataFromStringList(databaseService.loadAccountData());
         transferService.loadDataFromStringList(databaseService.loadTransferData());
     }
 
@@ -196,7 +197,10 @@ public class BankingInteractor {
         String clientIdentifier = getClientIdentifier(scanner);
 
         try {
-            clientService.openCheckingAccountForClient(clientIdentifier);
+            clientService.openCheckingAccountForClient(
+                    databaseService,
+                    clientIdentifier
+            );
             auditService.logEvent("open checking account");
             System.out.println("Successfully opened checking account!");
         } catch (Exception e) {
@@ -208,7 +212,10 @@ public class BankingInteractor {
         String clientIdentifier = getClientIdentifier(scanner);
 
         try {
-            clientService.openSavingsAccountForClient(clientIdentifier);
+            clientService.openSavingsAccountForClient(
+                    databaseService,
+                    clientIdentifier
+            );
             auditService.logEvent("open savings account");
             System.out.println("Successfully opened savings account!");
         } catch (Exception e) {
@@ -239,6 +246,7 @@ public class BankingInteractor {
         Address address = readAddress(scanner);
 
         atmService.createAtm(address, funds, identifier);
+        // Update to database.
         databaseService.insertAtm(
                 identifier,
                 address.getStreetAddress(),
@@ -328,7 +336,13 @@ public class BankingInteractor {
         BigDecimal amount = new BigDecimal(scanner.next());
 
         try {
-            transferService.makeTransfer(senderIban, receiverIban, amount, description);
+            transferService.makeTransfer(
+                    senderIban,
+                    receiverIban,
+                    amount,
+                    description,
+                    databaseService
+            );
             auditService.logEvent("make transfer");
         } catch (Exception e) {
             e.printStackTrace();

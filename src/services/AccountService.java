@@ -37,10 +37,20 @@ public class AccountService {
      *
      * Called from the ClientService method for opening a Checking Account.
      */
-    public void openCheckingAccount(Client client) {
+    public void openCheckingAccount(DatabaseService databaseService, Client client) {
         Account account = AccountFactory.getAccount("checking", client);
         account.createCard();
         accounts.add(account);
+
+        // Update to database.
+        databaseService.insertAccount(
+                account.getId(),
+                account.getClientId(),
+                "checking",
+                account.getIban(),
+                account.getOpenDate(),
+                account.getBalance()
+        );
     }
 
     /**
@@ -49,10 +59,20 @@ public class AccountService {
      *
      * Called from the ClientService method for opening a Savings Account.
      */
-    public void openSavingsAccount(Client client) {
+    public void openSavingsAccount(DatabaseService databaseService, Client client) {
         Account account = AccountFactory.getAccount("savings", client);
         account.createCard();
         accounts.add(account);
+
+        // Update to database.
+        databaseService.insertAccount(
+                account.getId(),
+                account.getClientId(),
+                "savings",
+                account.getIban(),
+                account.getOpenDate(),
+                account.getBalance()
+        );
     }
 
     public Account getAccountByCardNumber(String cardNumber) throws Exception {
@@ -99,6 +119,31 @@ public class AccountService {
     public void addCard(String iban) throws Exception {
         Account account = getAccountByIban(iban);
         account.createCard();
+    }
+
+    public void loadDataFromStringList(List<List<String>> dbData) {
+        for (List<String> data : dbData) {
+            Account account;
+            if (data.get(0).equals("checking")) {
+                account = new CheckingAccount(
+                        UUID.fromString(data.get(1)),
+                        UUID.fromString(data.get(2)),
+                        data.get(3),
+                        LocalDate.parse(data.get(4)),
+                        new BigDecimal(data.get(5))
+                );
+            } else {
+                account = new SavingsAccount(
+                        UUID.fromString(data.get(1)),
+                        UUID.fromString(data.get(2)),
+                        data.get(3),
+                        LocalDate.parse(data.get(4)),
+                        new BigDecimal(data.get(5))
+                );
+            }
+
+            accounts.add(account);
+        }
     }
 
     public void loadDataFromCsv(CsvReaderService reader) throws FileNotFoundException {

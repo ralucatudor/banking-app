@@ -28,6 +28,7 @@ public class AtmService {
     public void createAtm(Address address, BigDecimal initialFunds, String identifier) {
         Atm atm = new Atm(address, initialFunds, identifier);
         atms.add(atm);
+        // Update to database is made from the interactor service.
     }
 
     /**
@@ -72,6 +73,7 @@ public class AtmService {
 
         // Update to database.
         databaseService.updateAtmFunds(atm.getIdentifier(), atm.getFunds());
+        databaseService.updateAccountBalance(account.getId(), account.getBalance());
     }
 
     public void withdrawFromAccount(DatabaseService databaseService,
@@ -87,6 +89,7 @@ public class AtmService {
 
         // Update to database.
         databaseService.updateAtmFunds(atm.getIdentifier(), atm.getFunds());
+        databaseService.updateAccountBalance(account.getId(), account.getBalance());
     }
 
     public void deleteAtm(DatabaseService databaseService,

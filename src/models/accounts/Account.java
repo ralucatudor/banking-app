@@ -25,7 +25,9 @@ public abstract class Account {
         }
     }
 
-    // {@code clientId} refers to the account holder.
+    // {@code id} refers to the account id.
+    protected UUID id;
+    // {@code clientId} refers to the account holder id.
     protected UUID clientId;
     // {@code iban} refers to account number.
     protected String iban;
@@ -35,6 +37,7 @@ public abstract class Account {
     protected List<Card> cards = new ArrayList<>();
 
     public Account(UUID clientId) {
+        this.id = UUID.randomUUID();
         this.clientId = clientId;
         this.iban = RandomGenerator.getNumericString(AccountDetails.IBAN_SIZE.value);
         this.openDate = LocalDate.now();
@@ -48,6 +51,17 @@ public abstract class Account {
         this.balance = balance;
         createCard();
     }
+
+    public Account(UUID id, UUID clientId, String iban, LocalDate openDate, BigDecimal balance) {
+        this.id = id;
+        this.clientId = clientId;
+        this.iban = iban;
+        this.openDate = openDate;
+        this.balance = balance;
+        createCard();
+    }
+
+    public UUID getId() { return id; }
 
     public UUID getClientId() {
         return clientId;

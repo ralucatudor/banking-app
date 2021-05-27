@@ -13,6 +13,10 @@ public class SavingsAccount extends Account {
         super(clientId, iban, openDate, balance);
     }
 
+    public SavingsAccount(UUID id, UUID clientId, String iban, LocalDate openDate, BigDecimal balance) {
+        super(id, clientId, iban, openDate, balance);
+    }
+
     @Override
     public BigDecimal getDepositFee(BigDecimal amount) {
         return BigDecimal.ZERO;

@@ -125,6 +125,37 @@ public class DatabaseService {
     }
 
     /**
+     * READ account
+     */
+    public List<List<String>> loadAccountData() {
+        try (Connection connection = DriverManager.getConnection(URL, user, password)) {
+            ResultSet dbResult = getAccounts(connection);
+            List<List<String>> data = new ArrayList<>();
+
+            while (dbResult.next()) {
+                List<String> accounts = Arrays.asList(
+                        dbResult.getString("accountType"),
+                        dbResult.getString("id"),
+                        dbResult.getString("clientId"),
+                        dbResult.getString("iban"),
+                        dbResult.getString("openDate"),
+                        dbResult.getString("balance")
+                );
+                data.add(accounts);
+            }
+            return data;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    public static ResultSet getAccounts(Connection connection) throws SQLException {
+        String query = "SELECT * FROM account";
+        return connection.prepareStatement(query).executeQuery();
+    }
+
+    /**
      * CREATE client
      */
     public void insertClient(UUID id,
@@ -154,7 +185,6 @@ public class DatabaseService {
             preparedStatement.executeUpdate();
 
             preparedStatement.close();
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -184,7 +214,6 @@ public class DatabaseService {
             preparedStatement.executeUpdate();
 
             preparedStatement.close();
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -200,7 +229,7 @@ public class DatabaseService {
                                String destinationIban) {
         try (Connection connection = DriverManager.getConnection(URL, user, password)) {
 
-            String query = "INSERT INTO atm VALUES (NULL, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO transfer VALUES (NULL, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setDate(1, Date.valueOf(date));
@@ -212,7 +241,35 @@ public class DatabaseService {
             preparedStatement.executeUpdate();
 
             preparedStatement.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 
+    /**
+     * CREATE account
+     */
+    public void insertAccount(UUID id,
+                              UUID clientId,
+                              String accountType,
+                              String iban,
+                              LocalDate openDate,
+                              BigDecimal balance) {
+        try (Connection connection = DriverManager.getConnection(URL, user, password)) {
+
+            String query = "INSERT INTO account VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setString(1, id.toString());
+            preparedStatement.setString(2, clientId.toString());
+            preparedStatement.setString(3, accountType);
+            preparedStatement.setString(4, iban);
+            preparedStatement.setDate(5, Date.valueOf(openDate));
+            preparedStatement.setBigDecimal(6, balance);
+
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -229,6 +286,26 @@ public class DatabaseService {
 
             preparedStatement.setBigDecimal(1, newFunds);
             preparedStatement.setString(2, atmIdentifier);
+
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    /**
+     * UPDATE account (balance)
+     */
+    public void updateAccountBalance(UUID accountId, BigDecimal newBalance) {
+        try (Connection connection = DriverManager.getConnection(URL, user, password)) {
+
+            String query = "UPDATE account SET balance = ? WHERE id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setBigDecimal(1, newBalance);
+            preparedStatement.setString(2, accountId.toString());
 
             preparedStatement.executeUpdate();
 

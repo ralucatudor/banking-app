@@ -67,14 +67,18 @@ public class ClientService {
                 "Client with email address " + clientEmailAddress + " does not exist.");
     }
 
-    public void openCheckingAccountForClient(String clientEmailAddress) throws Exception {
+    public void openCheckingAccountForClient(
+            DatabaseService databaseService,
+            String clientEmailAddress) throws Exception {
         Client client = this.getClientByEmailAddress(clientEmailAddress);
-        accountService.openCheckingAccount(client);
+        accountService.openCheckingAccount(databaseService, client);
     }
 
-    public void openSavingsAccountForClient(String clientEmailAddress) throws Exception {
+    public void openSavingsAccountForClient(
+            DatabaseService databaseService,
+            String clientEmailAddress) throws Exception {
         Client client = this.getClientByEmailAddress(clientEmailAddress);
-        accountService.openSavingsAccount(client);
+        accountService.openSavingsAccount(databaseService, client);
     }
 
     public void showClientAccounts(String clientEmailAddress) throws Exception {

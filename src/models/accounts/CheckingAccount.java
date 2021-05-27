@@ -17,6 +17,10 @@ public class CheckingAccount extends Account {
         super(clientId, iban, openDate, balance);
     }
 
+    public CheckingAccount(UUID id, UUID clientId, String iban, LocalDate openDate, BigDecimal balance) {
+        super(id, clientId, iban, openDate, balance);
+    }
+
     @Override
     public BigDecimal getDepositFee(BigDecimal amount) {
         return DEPOSIT_FEE;
@@ -33,7 +37,7 @@ public class CheckingAccount extends Account {
     }
 
     public void addFunds(BigDecimal amount) {
-        this.balance = this.balance.add(amount).add(getDepositFee(amount));
+        this.balance = this.balance.add(amount).subtract(getDepositFee(amount));
     }
 
     public void deductFunds(BigDecimal amount) throws Exception {
